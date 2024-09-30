@@ -17,4 +17,9 @@ public class ControladorREST {
         return "vistaIndice";
     }
     
+    @GetMapping("/vistamenu")
+    public String vistaMenu() {
+        return "vistamenu"; // Thymeleaf buscará vistamenu.html en src/main/resources/templates/
+    }
+    
 }

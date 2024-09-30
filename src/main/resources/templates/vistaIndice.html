@@ -6,6 +6,7 @@
 </head>
 <body>
     <div class="container">
+		<a th:href="@{/vistamenu}"></a>
 	<div class="screen">
 		<div class="screen__content">
 			<form class="login">
@@ -17,10 +18,10 @@
 					<i class="login__icon fas fa-lock"></i>
 					<input type="password" class="login__input" placeholder="Password">
 				</div>
-				<button class="button login__submit">
+				<div class="button login__submit" th:onclick="|window.location.href='@{/vistamenu}'|">
 					<span class="button__text">Log In Now</span>
 					<i class="button__icon fas fa-chevron-right"></i>
-				</button>				
+				</div>				
 			</form>
 			<div class="social-login">
 				<h3>log in via</h3>
