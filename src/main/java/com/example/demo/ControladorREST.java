@@ -1,25 +1,44 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.example.demo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
-
 public class ControladorREST {
-    
+
+    @Autowired
+    private UsuariosRepository usuariosRepository;
+
+    // Página de inicio
     @GetMapping("/")
-    public String comienzo(){
-    
+    public String comienzo() {
         return "vistaIndice";
     }
-    
+
+    // Página del menú
     @GetMapping("/vistamenu")
     public String vistaMenu() {
-        return "vistamenu"; // Thymeleaf buscará vistamenu.html en src/main/resources/templates/
+        return "vistamenu";
     }
-    
+
+    // Método para agregar un nuevo usuario (HTTP POST)
+    @PostMapping("/usuarios")
+    @ResponseBody
+    public ResponseEntity<Usuarios> agregarUsuario(@RequestBody Usuarios nuevoUsuario) {
+        Usuarios usuarioGuardado = usuariosRepository.save(nuevoUsuario);
+        return new ResponseEntity<>(usuarioGuardado, HttpStatus.CREATED);
+    }
+
+    // Método para obtener todos los usuarios (HTTP GET)
+    @GetMapping("/usuarios")
+    @ResponseBody
+    public ResponseEntity<List<Usuarios>> getUsuarios() {
+        List<Usuarios> usuarios = usuariosRepository.findAll();
+        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+    }
 }
