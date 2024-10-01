@@ -41,4 +41,17 @@ public class ControladorREST {
         List<Usuarios> usuarios = usuariosRepository.findAll();
         return new ResponseEntity<>(usuarios, HttpStatus.OK);
     }
+
+    // Método para eliminar un usuario por ID (HTTP DELETE)
+    @DeleteMapping("/usuarios/{id}")
+    @ResponseBody
+    public ResponseEntity<String> eliminarUsuario(@PathVariable Integer id) {
+        if (usuariosRepository.existsById(id)) {
+            usuariosRepository.deleteById(id);
+            return new ResponseEntity<>("Usuario eliminado exitosamente", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+        }
+    }
 }
+
