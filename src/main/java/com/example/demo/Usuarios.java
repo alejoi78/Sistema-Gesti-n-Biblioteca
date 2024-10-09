@@ -18,4 +18,5 @@ public class Usuarios {
     private String apellido;
     private String password;
     private String username;
+    private String correoelectronico;
 }

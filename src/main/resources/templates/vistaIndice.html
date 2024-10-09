@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -16,6 +17,7 @@
     <link rel="stylesheet" href="style.css">
     <title>BookHaven - Iniciar Sesion</title>
 </head>
+
 <body>
 
     <div class="d-lg-flex half">
@@ -29,16 +31,22 @@
                         <form onsubmit="login(event)">
                             <div class="form-group first">
                                 <label for="username">Usuario</label>
-                                <input type="text" id="username" name="username" required class="form-control" placeholder="">
+                                <input type="text" id="username" name="username" required class="form-control"
+                                    placeholder="">
                             </div>
                             <div class="form-group last mb-3">
                                 <label for="password">Contraseña</label>
-                                <input type="password" id="password" name="password" required class="form-control" placeholder="">
+                                <input type="password" id="password" name="password" required class="form-control"
+                                    placeholder="">
                             </div>
-                            <input style="margin-top: 40px;" type="submit" value="Iniciar Sesion" class="btn btn-block btn-primary">
+                            <input style="margin-top: 40px;" type="submit" value="Iniciar Sesion"
+                                class="btn btn-block btn-primary">
 
                             <div style="margin-top: 30px;" class="d-flex mb-5 align-items-center">
-                                <span class="ml-auto"><a href="#" class="forgot-pass">Registrate</a></span> 
+                                <span class="ml-auto"><a href="/registro" class="forgot-pass">Registrate</a></span>
+                            </div>
+                            <div style="margin-top: 30px;" class="d-flex mb-5 align-items-center">
+                                <span class="ml-auto"><a href="/recuperarcontraseña" class="forgot-pass">¿Olvidó su contraseña?</a></span>
                             </div>
                         </form>
                     </div>
@@ -73,18 +81,19 @@
                 // Guardar el token y redirigir
                 localStorage.setItem('token', token);
                 window.location.href = '/vistamenu';
-				// Limpiar los campos de entrada
+                // Limpiar los campos de entrada
                 document.getElementById('username').value = '';
                 document.getElementById('password').value = '';
             } else {
                 const errorText = await response.text();
 
                 // Mostrar mensaje de error con Toastr
-				toastr.options.positionClass = 'toast-top-center'
+                toastr.options.positionClass = 'toast-top-center'
                 toastr.error('Error: ' + errorText);
             }
         }
     </script>
 
 </body>
+
 </html>

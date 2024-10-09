@@ -10,14 +10,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/libros")
 public class LibroController {
 
     @Autowired
     private LibroRepository LibroRepository;
 
+    // Página de inicio
+    @GetMapping("/libros")
+    public String inicio() {
+        return "index";
+    }
 
     // Obtener todos los libros
-    @GetMapping("/libros")
+    @GetMapping
     @ResponseBody
     public ResponseEntity<List<Libros>> obtenerLibros() {
         List<Libros> libros = LibroRepository.findAll();
@@ -33,7 +39,7 @@ public class LibroController {
     }
 
     // Agregar un nuevo libro
-    @PostMapping("/libros")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<Libros> agregarLibro(@RequestBody Libros nuevoLibro) {
         Libros libroGuardado = LibroRepository.save(nuevoLibro);
@@ -65,7 +71,6 @@ public class LibroController {
             return new ResponseEntity<>("Libro no encontrado", HttpStatus.NOT_FOUND);
         }
     }
-    
 // borrar libro
 @DeleteMapping("/libros/{id}")
 @ResponseBody
@@ -82,16 +87,19 @@ public ResponseEntity<String> eliminarLibro(@PathVariable int id) {
     }
 }
 
-    // Obtener libro por título
-    @GetMapping("/libros/{titulo}")
-    @ResponseBody
-    public ResponseEntity<Libros> obtenerLibroPorTitulo(@PathVariable String titulo) {
-        Optional<Libros> libro = LibroRepository.findByTitulo(titulo);
-        return libro.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+ // Obtener libro por título, ignorando mayúsculas y minúsculas
+ @GetMapping("/libros/titulo/{titulo}")
+ public ResponseEntity<Libros> obtenerLibroPorTitulo(@PathVariable String titulo) {
+     // Busca el libro por título, ignorando diferencias entre mayúsculas y minúsculas
+     Optional<Libros> libro = LibroRepository.findByTitulo(titulo);
+
+     // Si se encuentra el libro, lo devuelve con el estado 200 OK
+     if (libro.isPresent()) {
+         return new ResponseEntity<>(libro.get(), HttpStatus.OK);
+     } else {
+         // Si no se encuentra, devuelve un estado 404 NOT FOUND
+         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+     }
     }
-
 }
-
-    
-
 
