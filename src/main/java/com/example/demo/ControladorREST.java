@@ -6,6 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import io.jsonwebtoken.SignatureException;
+
+
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -131,7 +135,7 @@ public class ControladorREST {
                 claims.put("role", "USER"); // Añade roles o cualquier otra información
 
                 // Fecha de expiración del token (ej. 10 minutos)
-                long expirationTime = 1000 * 60 * 10;
+                long expirationTime = 1000 * 60 * 120;
                 // Generar el token JWT
                 String token = Jwts.builder()
                         .setClaims(claims)
@@ -152,6 +156,31 @@ public class ControladorREST {
         }
     }
 
+    @GetMapping("/verify-token")
+    public ResponseEntity<?> verifyToken(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token no proporcionado");
+        }
+
+        String token = authHeader.substring(7); // Extrae el token del header
+
+        try {
+            // Verifica y extrae los claims del token
+            Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+
+            // Si el token es válido, puedes retornar los claims o cualquier información que necesites
+            return ResponseEntity.ok(claims);
+        } catch (SignatureException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al verificar el token");
+        }
+    }
+
+
     // Método para registrar un nuevo usuario (HTTP POST)
     @PostMapping("/registrar")
     public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDetails registrationDetails) {
@@ -162,58 +191,57 @@ public class ControladorREST {
             nuevoUsuario.setApellido(registrationDetails.getApellido());
             nuevoUsuario.setCorreoelectronico(registrationDetails.getcorreoelectronico());
             nuevoUsuario.setUsername(registrationDetails.getUsername());
-            nuevoUsuario.setPassword(passwordEncoder.encode(registrationDetails.getPassword())); // Encriptar la
-                                                                                                 // contraseña
+            nuevoUsuario.setPassword(passwordEncoder.encode(registrationDetails.getPassword()));
 
             // Guardar el usuario en la base de datos
             Usuarios usuarioGuardado = usuariosRepository.save(nuevoUsuario);
 
-            // Si el usuario se ha guardado exitosamente, enviamos el correo de bienvenida
-            // en HTML
+            // Si el usuario se ha guardado exitosamente, enviamos el correo en un nuevo hilo
             if (usuarioGuardado != null) {
-                EmailDetails emailDetails = new EmailDetails();
-                emailDetails.setRecipient(nuevoUsuario.getCorreoelectronico());
-                emailDetails.setSubject("Bienvenido a nuestro servicio");
+                new Thread(() -> {
+                    try {
+                        EmailDetails emailDetails = new EmailDetails();
+                        emailDetails.setRecipient(nuevoUsuario.getCorreoelectronico());
+                        emailDetails.setSubject("Bienvenido a nuestro servicio");
 
-                // Cuerpo del correo HTML
-                String htmlBody = """
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                            <style>
-                                body {
-                                    font-family: Arial, sans-serif;
-                                    background-color: #f4f4f4;
-                                    padding: 20px;
-                                }
-                                .email-container {
-                                    background-color: white;
-                                    padding: 20px;
-                                    border-radius: 10px;
-                                    max-width: 600px;
-                                    margin: auto;
-                                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                                }
-                                h1 {
-                                    color: #333;
-                                }
-                                p {
-                                    color: #666;
-                                }
-                                .footer {
-                                    margin-top: 20px;
-                                    text-align: center;
-                                    font-size: 12px;
-                                    color: #999;
-                                }
-                            </style>
-                        </head>
-                        <body>
-                            <div class="email-container">
-                                <h1>¡Bienvenido a nuestra plataforma, ' + nuevoUsuario.getNombre() + '!</h1>
-                                <p>Gracias por registrarte, """ + nuevoUsuario.getNombre() + " "
-                        + nuevoUsuario.getApellido() + """
-                                           Estamos emocionados de tenerte con nosotros.</p>
+                        // Cuerpo del correo HTML
+                        String htmlBody = """
+                                <!DOCTYPE html>
+                                <html>
+                                <head>
+                                    <style>
+                                        body {
+                                            font-family: Arial, sans-serif;
+                                            background-color: #f4f4f4;
+                                            padding: 20px;
+                                        }
+                                        .email-container {
+                                            background-color: white;
+                                            padding: 20px;
+                                            border-radius: 10px;
+                                            max-width: 600px;
+                                            margin: auto;
+                                            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                                        }
+                                        h1 {
+                                            color: #333;
+                                        }
+                                        p {
+                                            color: #666;
+                                        }
+                                        .footer {
+                                            margin-top: 20px;
+                                            text-align: center;
+                                            font-size: 12px;
+                                            color: #999;
+                                        }
+                                    </style>
+                                </head>
+                                <body>
+                                    <div class="email-container">
+                                        <h1>¡Bienvenido a nuestra plataforma, %s!</h1>
+                                        <p>Gracias por registrarte, %s %s.</p>
+                                        <p>Estamos emocionados de tenerte con nosotros.</p>
                                         <p>Si tienes alguna duda, no dudes en contactarnos.</p>
                                         <div class="footer">
                                             <p>© 2024 Nuestra Empresa. Todos los derechos reservados.</p>
@@ -221,26 +249,25 @@ public class ControladorREST {
                                     </div>
                                 </body>
                                 </html>
-                                """;
+                                """.formatted(nuevoUsuario.getNombre(), nuevoUsuario.getNombre(), nuevoUsuario.getApellido());
 
-                // Enviar el correo HTML
-                emailDetails.setMsgBody(htmlBody);
-                String emailStatus = emailService.sendHtmlMail(emailDetails);
+                        emailDetails.setMsgBody(htmlBody);
+                        emailService.sendHtmlMail(emailDetails);
+                    } catch (Exception e) {
+                        // Manejo de errores al enviar el correo
+                        System.err.println("Error al enviar el correo: " + e.getMessage());
+                    }
+                }).start();
 
-                if ("Correo HTML enviado exitosamente".equals(emailStatus)) {
-                    return new ResponseEntity<>("Usuario registrado y bienvenido", HttpStatus.CREATED);
-                } else {
-                    return new ResponseEntity<>("Usuario registrado, bienvenido", HttpStatus.CREATED);
-                }
+                return new ResponseEntity<>("Usuario registrado y bienvenido", HttpStatus.CREATED);
             } else {
-                return new ResponseEntity<>("Error al registrar el usuario, el correo ya es existente o no es valido",
-                        HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>("Error al registrar el usuario", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (Exception e) {
-            // Manejo de cualquier error en el proceso
             return new ResponseEntity<>("Ocurrió un error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     // Método para editar un usuario existente (HTTP PUT)
     @PutMapping("/editar/{id}")

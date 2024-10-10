@@ -9,3 +9,37 @@
     Inicio
 </body>
 </html>
+
+<Script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem('token');
+    
+
+    if (token) {
+        // Verificar el token al cargar la página
+        fetch('/verify-token', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // Token válido, puedes mostrar la vista de menú
+                console.log('Token válido');
+            } else {
+                // Token inválido, redirigir al inicio
+                window.location.href = '/';
+            }
+        })
+        .catch(error => {
+            console.error('Error al verificar el token:', error);
+            window.location.href = '/';
+        });
+    } else {
+        // Si no hay token, redirigir al inicio
+        window.location.href = '/';
+    }
+});
+
+</Script>

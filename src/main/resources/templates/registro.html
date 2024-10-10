@@ -60,37 +60,37 @@
     <script src="js/bootstrap.min.js"></script>
 
     <script>
-        async function register(event) {
-            event.preventDefault();
+    async function register(event) {
+    event.preventDefault();
 
-            const username = document.getElementById('username').value;
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+        const username = document.getElementById('username').value;
+        const firstName = document.getElementById('firstName').value;
+        const lastName = document.getElementById('lastName').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
 
-            if (password !== confirmPassword) {
-                toastr.error('Las contraseñas no coinciden.');
-                return;
-            }
-
-            const response = await fetch('http://localhost:8080/registrar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, nombre: firstName, apellido: lastName, correoelectronico: email, password }),
-            });
-            console.log(response);
-            
-            if (response.ok) {
-                toastr.success('Registro exitoso.');
-                window.location.href = '/';
-            } else {
-                toastr.error('Error al registrar el usuario.');
-            }
+        if (password !== confirmPassword) {
+            toastr.error('Las contraseñas no coinciden.');
+            return;
         }
+
+        const response = await fetch('http://localhost:8080/registrar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, nombre: firstName, apellido: lastName, correoelectronico: email, password }),
+        });
+
+        if (response.ok) {
+            toastr.success('Registro exitoso.');
+            window.location.href = '/';
+        } else {
+            toastr.error('Error al registrar el usuario.');
+        }
+    }
+
     </script>
 
 </body>
