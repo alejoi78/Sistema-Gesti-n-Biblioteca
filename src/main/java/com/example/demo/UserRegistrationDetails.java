@@ -1,11 +1,11 @@
 package com.example.demo;
 
-import lombok.AllArgsConstructor;
+import com.example.demo.models.Roles;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class UserRegistrationDetails {
     private String nombre;
@@ -13,6 +13,16 @@ public class UserRegistrationDetails {
     private String correoelectronico;
     private String password;
     private String Username;
+    private Roles rol;
+
+    public UserRegistrationDetails(String nombre, String apellido, String correoelectronico, String password, String Username, Roles rol) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correoelectronico = correoelectronico;
+        this.password = password;
+        this.Username = Username;
+        this.rol = rol;
+    }
 
     // Getters y Setters
     public String getNombre() {
@@ -53,5 +63,13 @@ public class UserRegistrationDetails {
 
     public void setUsarname(String Username) {
         this.Username = Username;
+    }
+
+    public Roles getRol() {
+        return rol; 
+    }
+
+    public void setRol(Roles rol) {
+        this.rol = rol; 
     }
 }

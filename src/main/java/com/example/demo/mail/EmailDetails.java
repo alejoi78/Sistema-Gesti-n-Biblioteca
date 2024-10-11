@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.mail;
 
 // Importing required classes
 import lombok.AllArgsConstructor;

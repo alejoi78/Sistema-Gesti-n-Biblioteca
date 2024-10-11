@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,11 +21,27 @@ import javax.crypto.SecretKey;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.AuthRequest;
+import com.example.demo.UserRegistrationDetails;
+import com.example.demo.mail.EmailDetails;
+import com.example.demo.mail.EmailService;
+import com.example.demo.models.Roles;
+import com.example.demo.models.Usuarios;
+import com.example.demo.repositories.RolRepository;
+import com.example.demo.repositories.UsuariosRepository;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 @Controller
 public class ControladorREST {
 
     @Autowired
     private UsuariosRepository usuariosRepository; // Cambia a minúsculas consistentemente
+
+    @Autowired
+    private RolRepository rolRepository; // Cambia a minúsculas consistentemente
 
     @Autowired
     private PasswordEncoder passwordEncoder; // Solo usa la inyección aquí
@@ -193,6 +209,15 @@ public class ControladorREST {
             nuevoUsuario.setUsername(registrationDetails.getUsername());
             nuevoUsuario.setPassword(passwordEncoder.encode(registrationDetails.getPassword()));
 
+            // Obtener el idRol del objeto rol
+            int idRol = registrationDetails.getRol().getIdRol();
+            // Buscar el rol por id
+            Roles rol = rolRepository.findById(idRol)
+                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
+            System.out.println("Rol encontrado: " + rol.getTipodeRol());
+            // Asignar el rol encontrado al usuario
+            nuevoUsuario.setRol(rol);
+
             // Guardar el usuario en la base de datos
             Usuarios usuarioGuardado = usuariosRepository.save(nuevoUsuario);
 
@@ -303,4 +328,38 @@ public class ControladorREST {
             return new ResponseEntity<>("Usuario no encontrado.", HttpStatus.NOT_FOUND);
         }
     }
+
+    //Insertar automaticamente los roles en la base de datos
+    @Configuration
+    public class LoadDatabase {
+
+        @Bean
+        CommandLineRunner initRolesDatabase(RolRepository rolRepository) {
+            return args -> {
+                if (rolRepository.findByTipodeRol("Administrador") == null) {
+                    rolRepository.save(new Roles(1, "Administrador"));
+                }
+                if (rolRepository.findByTipodeRol("Usuario") == null) {
+                    rolRepository.save(new Roles(2, "Usuario"));
+                }
+            };
+        }
+
+        @Bean
+        CommandLineRunner initUsersDatabase(UsuariosRepository usuariosRepository) {
+                return args -> {
+                    // Esperar unos segundos antes de insertar el usuario
+                try {
+                    Thread.sleep(5000);  // 5 segundos de espera
+                    Roles rol = new Roles(2, "Administrador"); 
+                    usuariosRepository.save(new Usuarios(1, "Home", "Book", "$2a$10$IfxIObfqEM76kuQhb/12/uT5O8dEjz6HEoNMjm2gxl3Ej4/lV6PGa", "BookHaven", "BookHaven.com", rol));
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+
+                
+            };
+        }
+    }
+
 }

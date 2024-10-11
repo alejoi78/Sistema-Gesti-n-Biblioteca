@@ -80,7 +80,14 @@
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, nombre: firstName, apellido: lastName, correoelectronico: email, password }),
+            body: JSON.stringify({username: username,
+            nombre: firstName,
+            apellido: lastName,
+            correoelectronico: email,
+            password: password,
+            rol: {
+                idRol: 2 //2 Es el rol de usuario
+            }}),
         });
 
         if (response.ok) {

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.mail;
 
 import java.io.File;
 import jakarta.mail.MessagingException;
