@@ -143,12 +143,21 @@ public class ControladorREST {
         Optional<Usuarios> usuarioOpt = usuariosRepository.findByUsername(username);
         if (usuarioOpt.isPresent()) {
             Usuarios usuario = usuarioOpt.get();
+            int idUsuario = usuario.getId();
+            String nombreUsuario = usuario.getNombre();
+            String apellidoUsuario = usuario.getApellido();
+            String correoUsuario = usuario.getCorreoelectronico();
+            String rolUsuario = usuario.getRol().getTipodeRol();
 
             // Verificar la contraseña usando BCrypt
             if (passwordEncoder.matches(password, usuario.getPassword())) {
 
                 Map<String, Object> claims = new HashMap<>();
-                claims.put("role", "USER"); // Añade roles o cualquier otra información
+                claims.put("rol", rolUsuario); // Añade roles o cualquier otra información
+                claims.put("id", idUsuario);
+                claims.put("nombre", nombreUsuario);
+                claims.put("apellido", apellidoUsuario);
+                claims.put("correo", correoUsuario);
 
                 // Fecha de expiración del token (ej. 10 minutos)
                 long expirationTime = 1000 * 60 * 120;
@@ -351,7 +360,7 @@ public class ControladorREST {
                     // Esperar unos segundos antes de insertar el usuario
                 try {
                     Thread.sleep(5000);  // 5 segundos de espera
-                    Roles rol = new Roles(2, "Administrador"); 
+                    Roles rol = new Roles(1, "Administrador"); 
                     usuariosRepository.save(new Usuarios(1, "Home", "Book", "$2a$10$IfxIObfqEM76kuQhb/12/uT5O8dEjz6HEoNMjm2gxl3Ej4/lV6PGa", "BookHaven", "BookHaven.com", rol));
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();

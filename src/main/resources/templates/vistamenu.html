@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="MainLogo.png" type="image/png">
     <title>Document</title>
+    <div id="userInfo">
+    </div>
+    
+    
 </head>
 <body>
     Inicio
@@ -13,7 +18,6 @@
 <Script>
     document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem('token');
-    
 
     if (token) {
         // Verificar el token al cargar la página
@@ -25,12 +29,23 @@
         })
         .then(response => {
             if (response.ok) {
-                // Token válido, puedes mostrar la vista de menú
-                console.log('Token válido');
+                // Invocamos response.json() para obtener los datos del cuerpo
+                return response.json(); // Aquí obtenemos los datos de la respuesta
             } else {
                 // Token inválido, redirigir al inicio
                 window.location.href = '/';
             }
+        })
+        .then(data => {
+            // Aquí se manejan los datos devueltos por el servidor
+            console.log('Token válido'); // Mensaje en consola
+            console.log(data); // Los datos devueltos por el servidor
+
+            // Mostrar los datos en el HTML
+            const userInfoDiv = document.getElementById('userInfo');
+                    userInfoDiv.innerHTML = `<p>Nombre de usuario: ${data.sub}</p>
+                                             <p>Rol: ${data.rol}</p>`;
+            
         })
         .catch(error => {
             console.error('Error al verificar el token:', error);
@@ -40,6 +55,8 @@
         // Si no hay token, redirigir al inicio
         window.location.href = '/';
     }
+
 });
+
 
 </Script>
