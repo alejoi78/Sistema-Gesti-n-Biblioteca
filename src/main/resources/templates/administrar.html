@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Bootstrap CRUD Data Table for Database with Modal Form</title>
+    <link rel="icon" href="MainLogo.png" type="image/png">
+    <link rel="stylesheet" href="crudStyle.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container-xl">
+      <div class="table-responsive">
+        <div class="table-wrapper">
+          <div class="table-title">
+            <div class="row">
+              <div class="col-sm-6">
+                <h2>Administrar <b>Usuarios</b></h2>
+              </div>
+              <div class="col-sm-6">
+                <a
+                  href="#addEmployeeModal"
+                  class="btn btn-success"
+                  data-toggle="modal"
+                  ><i class="material-icons">&#xE147;</i>
+                  <span>Agregar nuevo usuario</span></a
+                >
+              </div>
+            </div>
+          </div>
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <span class="custom-checkbox">
+                    <input
+                      type="checkbox"
+                      id="checkbox1"
+                      name="options[]"
+                      value="1"
+                    />
+                    <label for="checkbox1"></label>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="clearfix">
+            <div class="hint-text">
+              Showing <b>5</b> out of <b>25</b> entries
+            </div>
+            <ul class="pagination">
+              <li class="page-item disabled"><a href="#">Previous</a></li>
+              <li class="page-item"><a href="#" class="page-link">1</a></li>
+              <li class="page-item"><a href="#" class="page-link">2</a></li>
+              <li class="page-item active">
+                <a href="#" class="page-link">3</a>
+              </li>
+              <li class="page-item"><a href="#" class="page-link">4</a></li>
+              <li class="page-item"><a href="#" class="page-link">5</a></li>
+              <li class="page-item"><a href="#" class="page-link">Next</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- add Modal HTML -->
+    <div id="addEmployeeModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="addEmployeeForm">
+            <div class="modal-header">
+              <h4 class="modal-title">Agregar Usuario</h4>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" id="nombre" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Apellido</label>
+                <input type="text" id="apellido" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Nombre de Usuario</label>
+                <input type="text" id="username" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="password" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Rol</label>
+                <select id="rol" class="form-control" required>
+                  <option value="" disabled selected>Elige una opción</option>
+                  <option value="2">Usuario</option>
+                  <option value="1">Administrador</option>
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+                value="Cancelar"
+              />
+              <input type="submit" class="btn btn-success" value="Crear" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Modal HTML -->
+    <div id="editEmployeeModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form>
+            <div class="modal-header">
+              <h4 class="modal-title">Edit Employee</h4>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Address</label>
+                <textarea class="form-control" required></textarea>
+              </div>
+              <div class="form-group">
+                <label>Phone</label>
+                <input type="text" class="form-control" required />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+                value="Cancel"
+              />
+              <input type="submit" class="btn btn-info" value="Save" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Modal HTML -->
+    <div id="deleteEmployeeModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="deleteForm">
+            <!-- Agregar un ID al formulario -->
+            <div class="modal-header">
+              <h4 class="modal-title">Eliminar Usuario</h4>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Estas seguro que quieres eliminar este usuario?</p>
+              <p class="text-warning">
+                <small>Esta accion no se puede deshacer.</small>
+              </p>
+            </div>
+            <div class="modal-footer">
+              <input
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+                value="Cancelar"
+              />
+              <input type="submit" class="btn btn-danger" value="Eliminar" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  //Variables globales
+  let dataTokenUsuario = {}
+  let IdUsuarioSacadoDeToken = null
+
+  //Leer token y autorizar usuario
+  document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      // Verificar el token al cargar la página
+      fetch("/verify-token", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json(); // Aquí obtenemos los datos de la respuesta
+          } else {
+            // Token inválido, redirigir al inicio
+            window.location.href = "/";
+          }
+        })
+        .then((data) => {
+          if (data.IdRol == 1) {
+            administrarUsuarios(data);
+            dataTokenUsuario = data
+            IdUsuarioSacadoDeToken = data.id;
+          } else {
+            window.location.href = "/vistamenu";
+          }
+          
+        })
+        .catch((error) => {
+          console.error("Error al verificar el token:", error);
+          window.location.href = "/";
+        });
+    } else {
+      // Si no hay token, redirigir al inicio
+      window.location.href = "/";
+    }
+  });
+
+
+  function administrarUsuarios(data) {
+    // Hacer un fetch para obtener los usuarios según el rol
+    fetch("http://localhost:8080/usuarios", {
+      method: "GET",
+      headers: {
+        id_rol: data.IdRol, // Aquí envías el valor del id_rol
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error en la solicitud");
+        }
+        return response.json(); // Convertimos la respuesta a JSON
+      })
+      .then((usuarios) => {
+        // Seleccionar el tbody de la tabla
+        const tableBody = document.querySelector("table tbody");
+
+        // Limpiar cualquier contenido anterior
+        tableBody.innerHTML = "";
+
+        // Iterar sobre los usuarios y crear filas
+        usuarios.forEach((usuario, index) => {
+          const row = `
+            <tr>
+              <td>${usuario.username}</td>
+              <td>${usuario.nombre}</td>
+              <td>${usuario.apellido}</td>
+              <td>${usuario.correoelectronico}</td>
+              <td>${usuario.rol.tipodeRol}</td>
+              <td>
+                <a href="#editEmployeeModal" class="edit" data-toggle="modal" data-id="${usuario.id}">
+                  <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+                </a>
+
+                <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="${usuario.id}">
+                  <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                </a>
+              </td>
+            </tr>
+          `;
+          // Insertar la fila en el tbody
+          tableBody.innerHTML += row;
+        });
+
+        let IdUsuario; // Variable para almacenar el ID del usuario a eliminar
+
+        // Escuchar el evento de clic en el enlace de eliminar
+        $(document).on("click", ".delete", function () {
+            IdUsuario = $(this).data("id");
+        });
+
+        $(document).on("click", ".edit", function () {
+           IdUsuario = $(this).data("id");
+        });
+
+        // Interceptar el envío del formulario
+        document
+          .getElementById("deleteForm")
+          .addEventListener("submit", function (event) {
+            event.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
+            console.log(IdUsuario);
+            
+            // Realizar la solicitud DELETE
+            fetch(`http://localhost:8080/usuarios/${IdUsuario}`, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                id_rol: data.IdRol,
+              },
+            })
+              .then((response) => {
+                console.log(response);
+                $("#deleteEmployeeModal").modal("hide");
+                //Actualizar crud Usuarios
+                administrarUsuarios(dataTokenUsuario);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          });
+      })
+      .catch((error) => {
+        console.error("Error al obtener los usuarios:", error);
+      });
+  }
+
+
+  function crearUsuario(data) {
+    return fetch('http://localhost:8080/usuarios', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        id_rol: IdUsuarioSacadoDeToken, 
+      },
+      body: JSON.stringify(data) // Convertimos los datos a formato JSON
+    })
+    .then(response => response.json())
+    .then(result => {
+      console.log('Success:', result);
+      return result;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error;
+    });
+  }
+
+  // Manejar el envío del formulario de crear usuario
+  document.getElementById('addEmployeeForm').addEventListener('submit', function (event) {
+    event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+
+    // Extraer los valores de los campos del formulario
+    const nombre = document.getElementById('nombre').value;
+    const apellido = document.getElementById('apellido').value;
+    const email = document.getElementById('email').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const Idrol = document.getElementById('rol').value;
+
+    // Crear el objeto con los datos del formulario
+    const data = {
+      nombre: nombre,
+      apellido: apellido,
+      correoelectronico: email,
+      username: username,
+      password: password,
+      rol: {
+        idRol: Idrol,
+      }
+    };
+    
+    // Llamar a la función crearUsuario con los datos obtenidos
+    crearUsuario(data)
+      .then(result => {
+        console.log(result);
+        // Cerrar el modal y/o mostrar una notificación de éxito
+        $('#addEmployeeModal').modal('hide');
+        //Actualizar crud Usuarios
+        administrarUsuarios(dataTokenUsuario)
+      })
+      .catch(error => {
+        // Manejar errores, mostrar mensaje de error, etc.
+        alert('Hubo un error al crear el usuario');
+      });
+  });
+</script>

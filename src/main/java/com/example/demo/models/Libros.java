@@ -17,12 +17,8 @@ public class Libros {
     private int contador = 0;
     private String titulo;
     private String autor;
-    private String isbn;
     private int numeroPaginas;
-    private String editorial;
     private int anioPublicacion;
     private double precio;
     private String genero;
-    private String idioma;
-    private String formato;
 }

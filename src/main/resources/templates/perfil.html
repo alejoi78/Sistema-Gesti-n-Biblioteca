@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="userInfo">
+    </div>
+</body>
+</html>
+
+
+<Script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+        // Verificar el token al cargar la página
+        fetch('/verify-token', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // Invocamos response.json() para obtener los datos del cuerpo
+                return response.json(); // Aquí obtenemos los datos de la respuesta
+            } else {
+                // Token inválido, redirigir al inicio
+                window.location.href = '/';
+            }
+        })
+        .then(data => {
+            // Aquí se manejan los datos devueltos por el servidor
+            console.log('Token válido'); // Mensaje en consola
+            console.log(data); // Los datos devueltos por el servidor
+
+            // Mostrar los datos en el HTML
+            const userInfoDiv = document.getElementById('userInfo');
+                    userInfoDiv.innerHTML = `<p>Nombre de usuario: ${data.sub}</p>
+                                             <p>Correo electronico: ${data.correo}</p>
+                                            <p>Nombre: ${data.nombre}</p>
+                                            <p>Apellido: ${data.apellido}</p>
+                                             <p>Rol: ${data.rol}</p>`;
+            
+        })
+        .catch(error => {
+            console.error('Error al verificar el token:', error);
+            window.location.href = '/';
+        });
+    } else {
+        // Si no hay token, redirigir al inicio
+        window.location.href = '/';
+    }
+
+});
+
+
+</Script>

@@ -21,7 +21,6 @@ import javax.crypto.SecretKey;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.demo.AuthRequest;
 import com.example.demo.UserRegistrationDetails;
 import com.example.demo.mail.EmailDetails;
 import com.example.demo.mail.EmailService;
@@ -29,6 +28,7 @@ import com.example.demo.models.Roles;
 import com.example.demo.models.Usuarios;
 import com.example.demo.repositories.RolRepository;
 import com.example.demo.repositories.UsuariosRepository;
+import com.example.demo.security.AuthRequest;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -76,55 +76,87 @@ public class ControladorREST {
         return "recuperarcontraseña";
     }
 
-    // Método para obtener todos los usuarios (HTTP GET)
+    // Mi Perfil
+    @GetMapping("/perfil")
+    public String perfil() {
+        return "perfil";
+    }
+
+    // Recuperar contraseña
+    @GetMapping("/administrar")
+    public String administrar() {
+        return "administrar";
+    }
+
+    // Recuperar contraseña
+    @GetMapping("/crudUsuarios")
+    public String crudUsuarios() {
+        return "crudUsuarios";
+    }
+
+   // Método para obtener todos los usuarios (HTTP GET)
     @GetMapping("/usuarios")
     @ResponseBody
-    public ResponseEntity<List<Usuarios>> getUsuarios() {
-        List<Usuarios> usuarios = usuariosRepository.findAll();
-        return new ResponseEntity<>(usuarios, HttpStatus.OK);
+    public ResponseEntity<List<Usuarios>> getUsuarios(@RequestHeader("id_rol") int idRol) {
+        if (idRol == 1) {
+            List<Usuarios> usuarios = usuariosRepository.findAll();
+            return new ResponseEntity<>(usuarios, HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
 
     // Método para agregar un nuevo usuario (HTTP POST)
+    // Método para agregar un nuevo usuario (HTTP POST)
     @PostMapping("/usuarios")
     @ResponseBody
-    public ResponseEntity<Usuarios> agregarUsuario(@RequestBody Usuarios nuevoUsuario) {
-        nuevoUsuario.setPassword(passwordEncoder.encode(nuevoUsuario.getPassword())); // Encriptar la contraseña
-        Usuarios usuarioGuardado = usuariosRepository.save(nuevoUsuario);
-        return new ResponseEntity<>(usuarioGuardado, HttpStatus.CREATED);
+    public ResponseEntity<Usuarios> agregarUsuario(@RequestHeader("id_rol") int idRol,
+            @RequestBody Usuarios nuevoUsuario) {
+        if (idRol == 1) {
+            nuevoUsuario.setPassword(passwordEncoder.encode(nuevoUsuario.getPassword())); // Encriptar la contraseña
+            Usuarios usuarioGuardado = usuariosRepository.save(nuevoUsuario);
+            return new ResponseEntity<>(usuarioGuardado, HttpStatus.CREATED);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
     }
 
     // Método para eliminar un usuario por ID (HTTP DELETE)
     @DeleteMapping("/usuarios/{id}")
     @ResponseBody
-    public ResponseEntity<String> eliminarUsuario(@PathVariable Integer id) {
-        if (usuariosRepository.existsById(id)) {
-            usuariosRepository.deleteById(id);
-            return new ResponseEntity<>("Usuario eliminado exitosamente", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> eliminarUsuario(@RequestHeader("id_rol") int idRol, @PathVariable Integer id) {
+        if (idRol == 1) {
+            if (usuariosRepository.existsById(id)) {
+                usuariosRepository.deleteById(id);
+                return new ResponseEntity<>("Usuario eliminado exitosamente", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+            }
         }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acceso denegado");
     }
 
     // Método para actualizar un usuario (HTTP PUT)
     @PutMapping("/usuarios/{id}")
     @ResponseBody
-    public ResponseEntity<String> editarUsuario(@PathVariable Integer id, @RequestBody Usuarios usuarioActualizado) {
-        Optional<Usuarios> usuarioExistenteOpt = usuariosRepository.findById(id);
-        if (usuarioExistenteOpt.isPresent()) {
-            Usuarios usuarioExistente = usuarioExistenteOpt.get();
-            // Actualizar solo si los valores son proporcionados
-            if (usuarioActualizado.getNombre() != null && !usuarioActualizado.getNombre().isEmpty()) {
-                usuarioExistente.setNombre(usuarioActualizado.getNombre());
+    public ResponseEntity<String> editarUsuario(@RequestHeader("id_rol") int idRol, @PathVariable Integer id,
+            @RequestBody Usuarios usuarioActualizado) {
+        if (idRol == 1) {
+            Optional<Usuarios> usuarioExistenteOpt = usuariosRepository.findById(id);
+            if (usuarioExistenteOpt.isPresent()) {
+                Usuarios usuarioExistente = usuarioExistenteOpt.get();
+                // Actualizar solo si los valores son proporcionados
+                if (usuarioActualizado.getNombre() != null && !usuarioActualizado.getNombre().isEmpty()) {
+                    usuarioExistente.setNombre(usuarioActualizado.getNombre());
+                }
+                if (usuarioActualizado.getApellido() != null && !usuarioActualizado.getApellido().isEmpty()) {
+                    usuarioExistente.setApellido(usuarioActualizado.getApellido());
+                }
+                usuariosRepository.save(usuarioExistente);
+                return new ResponseEntity<>("Usuario actualizado exitosamente", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
             }
-            if (usuarioActualizado.getApellido() != null && !usuarioActualizado.getApellido().isEmpty()) {
-                usuarioExistente.setApellido(usuarioActualizado.getApellido());
-            }
-            // No es recomendable cambiar el ID ni la contraseña aquí
-            usuariosRepository.save(usuarioExistente);
-            return new ResponseEntity<>("Usuario actualizado exitosamente", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
         }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acceso denegado");
     }
 
     // Nuevo método para la autenticación
@@ -147,6 +179,7 @@ public class ControladorREST {
             String nombreUsuario = usuario.getNombre();
             String apellidoUsuario = usuario.getApellido();
             String correoUsuario = usuario.getCorreoelectronico();
+            int IdrolUsuario = usuario.getRol().getIdRol();
             String rolUsuario = usuario.getRol().getTipodeRol();
 
             // Verificar la contraseña usando BCrypt
@@ -154,6 +187,7 @@ public class ControladorREST {
 
                 Map<String, Object> claims = new HashMap<>();
                 claims.put("rol", rolUsuario); // Añade roles o cualquier otra información
+                claims.put("IdRol", IdrolUsuario);
                 claims.put("id", idUsuario);
                 claims.put("nombre", nombreUsuario);
                 claims.put("apellido", apellidoUsuario);
