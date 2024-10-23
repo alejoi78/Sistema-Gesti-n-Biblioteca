@@ -74,35 +74,35 @@ public class LibroController {
             return new ResponseEntity<>("Libro no encontrado", HttpStatus.NOT_FOUND);
         }
     }
-// borrar libro
-@DeleteMapping("/libros/{id}")
-@ResponseBody
-public ResponseEntity<String> eliminarLibro(@PathVariable int id) {
-    System.out.println("Intentando eliminar libro con ID: " + id);
-    
-    if (LibroRepository.existsById(id)) {
-        LibroRepository.deleteById(id);
-        System.out.println("Libro eliminado: " + id);
-        return new ResponseEntity<>("Libro eliminado exitosamente", HttpStatus.OK);
-    } else {
-        System.out.println("Libro no encontrado: " + id);
-        return new ResponseEntity<>("Libro no encontrado", HttpStatus.NOT_FOUND);
+    // borrar libro
+    @DeleteMapping("/libros/{id}")
+    @ResponseBody
+    public ResponseEntity<String> eliminarLibro(@PathVariable int id) {
+        System.out.println("Intentando eliminar libro con ID: " + id);
+        
+        if (LibroRepository.existsById(id)) {
+            LibroRepository.deleteById(id);
+            System.out.println("Libro eliminado: " + id);
+            return new ResponseEntity<>("Libro eliminado exitosamente", HttpStatus.OK);
+        } else {
+            System.out.println("Libro no encontrado: " + id);
+            return new ResponseEntity<>("Libro no encontrado", HttpStatus.NOT_FOUND);
+        }
     }
-}
 
- // Obtener libro por título, ignorando mayúsculas y minúsculas
- @GetMapping("/libros/titulo/{titulo}")
- public ResponseEntity<Libros> obtenerLibroPorTitulo(@PathVariable String titulo) {
-     // Busca el libro por título, ignorando diferencias entre mayúsculas y minúsculas
-     Optional<Libros> libro = LibroRepository.findByTitulo(titulo);
+    // Obtener libro por título, ignorando mayúsculas y minúsculas
+    @GetMapping("/libros/titulo/{titulo}")
+    public ResponseEntity<Libros> obtenerLibroPorTitulo(@PathVariable String titulo) {
+        // Busca el libro por título, ignorando diferencias entre mayúsculas y minúsculas
+        Optional<Libros> libro = LibroRepository.findByTitulo(titulo);
 
-     // Si se encuentra el libro, lo devuelve con el estado 200 OK
-     if (libro.isPresent()) {
-         return new ResponseEntity<>(libro.get(), HttpStatus.OK);
-     } else {
-         // Si no se encuentra, devuelve un estado 404 NOT FOUND
-         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-     }
-    }
+        // Si se encuentra el libro, lo devuelve con el estado 200 OK
+        if (libro.isPresent()) {
+            return new ResponseEntity<>(libro.get(), HttpStatus.OK);
+        } else {
+            // Si no se encuentra, devuelve un estado 404 NOT FOUND
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        }
 }
 

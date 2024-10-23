@@ -125,12 +125,12 @@
           <table class="table table-striped table-hover">
             <thead>
               <tr>
-                <th>Usuario</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Email</th>
-                <th>Rol</th>
-                <th>Actions</th>
+                <th style="width: auto;">Usuario</th>
+                <th style="width: auto;">Nombre</th>
+                <th style="width: auto;">Apellido</th>
+                <th style="width: auto;">Email</th>
+                <th style="width: auto;">Rol</th>
+                <th style="width: auto;">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -150,9 +150,70 @@
             </tbody>
           </table>
           <div class="clearfix">
-            <div class="hint-text">
-              Showing <b>5</b> out of <b>25</b> entries
+            <ul class="pagination">
+              <li class="page-item disabled"><a href="#">Previous</a></li>
+              <li class="page-item"><a href="#" class="page-link">1</a></li>
+              <li class="page-item"><a href="#" class="page-link">2</a></li>
+              <li class="page-item active">
+                <a href="#" class="page-link">3</a>
+              </li>
+              <li class="page-item"><a href="#" class="page-link">4</a></li>
+              <li class="page-item"><a href="#" class="page-link">5</a></li>
+              <li class="page-item"><a href="#" class="page-link">Next</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-xl" style="margin-top: 50px;">
+      <div class="table-responsive">
+        <div class="table-wrapper" style="margin-bottom: 150px;">
+          <div class="table-title">
+            <div class="row">
+              <div class="col-sm-6">
+                <h2>Administrar <b>Libros</b></h2>
+              </div>
+              <div class="col-sm-6">
+                <a
+                  href="#addEmployeeModal"
+                  class="btn btn-success"
+                  data-toggle="modal"
+                  ><i class="material-icons">&#xE147;</i>
+                  <span>Agregar nuevo libro</span></a
+                >
+              </div>
             </div>
+          </div>
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th style="width: auto;">Titulo</th>
+                <th style="width: auto;">Autor</th>
+                <th>Paginas</th>
+                <th>Año</th>
+                <th>Precio</th>
+                <th>Genero</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="librosTableBody">
+              <tr>
+                <td>
+                  <span class="custom-checkbox">
+                    <input
+                      type="checkbox"
+                      id="checkbox1"
+                      name="options[]"
+                      value="1"
+                    />
+                    <label for="checkbox1"></label>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="clearfix">
             <ul class="pagination">
               <li class="page-item disabled"><a href="#">Previous</a></li>
               <li class="page-item"><a href="#" class="page-link">1</a></li>
@@ -353,6 +414,7 @@
         .then((data) => {
           if (data.IdRol == 1) {
             administrarUsuarios(data);
+            administrarLibros(data)
             dataTokenUsuario = data
             IdUsuarioSacadoDeToken = data.id;
           } else {
@@ -455,6 +517,169 @@
                 $("#editEmployeeModal").modal("hide");
                 //Actualizar crud Usuarios
                 administrarUsuarios(dataTokenUsuario);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+            // Aquí va tu lógica de PUT
+          } else {
+            // Si no cambió nada, no hacer nada
+            alert("Los datos siguen iguales. Ningun dato se ha modificado");
+          }
+        }
+
+        // Escuchar el evento de clic en el enlace de editar
+        $(document).on("click", ".edit", function () {
+          IdUsuario = $(this).data("id");
+          let nombreUsuario = $(this).data("nombre");
+          let apellidoUsuario = $(this).data("apellido");
+          let usernameUsuario = $(this).data("usuario");
+          let emailUsuario = $(this).data("email");
+          let rolUsuario = $(this).data("rol");
+
+          // Extraer los valores originales para referencia
+          document.getElementById('nombreEditarUsuario').value = nombreUsuario;
+          document.getElementById('apellidoEditarUsuario').value = apellidoUsuario;
+          document.getElementById('usernameEditarUsuario').value = usernameUsuario;
+          document.getElementById('emailEditarUsuario').value = emailUsuario;
+          document.getElementById('rolEditarUsuario').value = rolUsuario;
+
+          // Guardar los datos originales
+          datosAnterioresEditUsuario = {
+            nombre: nombreUsuario,
+            apellido: apellidoUsuario,
+            username: usernameUsuario,
+            email: emailUsuario,
+            rol: parseInt(rolUsuario, 10) // Asegúrate de que este valor sea un número
+          };
+
+          // Remover el evento submit anterior para evitar duplicados
+          document.getElementById("editFormUsuario").removeEventListener("submit", manejarEnvioFormulario);
+          
+          // Añadir el evento submit
+          document.getElementById("editFormUsuario").addEventListener("submit", manejarEnvioFormulario);
+        });
+
+
+
+        // Interceptar el envío del formulario
+        document
+          .getElementById("deleteFormUsuario")
+          .addEventListener("submit", function (event) {
+            event.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
+            console.log(IdUsuario);
+            
+            // Realizar la solicitud DELETE
+            fetch(`http://localhost:8080/usuarios/${IdUsuario}`, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                id_rol: data.IdRol,
+              },
+            })
+              .then((response) => {
+                console.log(response);
+                $("#deleteEmployeeModal").modal("hide");
+                //Actualizar crud Usuarios
+                administrarUsuarios(dataTokenUsuario);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          });
+      })
+      .catch((error) => {
+        console.error("Error al obtener los usuarios:", error);
+      });
+  }
+
+  function administrarLibros(data) {
+    // Hacer un fetch para obtener los libros según el rol
+    fetch("http://localhost:8080/libros", {
+      method: "GET",
+      headers: {
+        id_rol: data.IdRol, // Aquí envías el valor del id_rol
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error en la solicitud");
+        }
+        return response.json(); // Convertimos la respuesta a JSON
+      })
+      .then((libros) => {
+        console.log(libros);
+        
+        // Seleccionar el tbody de la tabla
+        const tableBody = document.getElementById("librosTableBody");
+
+        // Limpiar cualquier contenido anterior
+        tableBody.innerHTML = "";
+
+        // Iterar sobre los libros y crear filas
+        libros.forEach((libros, index) => {
+          const row = `
+            <tr>
+              <td>${libros.titulo}</td>
+              <td>${libros.autor}</td>
+              <td>${libros.numeroPaginas}</td>
+              <td>${libros.anioPublicacion}</td>
+              <td>${libros.precio}</td>
+              <td>${libros.genero}</td>
+              <td>
+                <a href="#editEmployeeModal" class="edit" data-toggle="modal" data-id="${libros.id}" data-nombre="${libros.nombre}" data-apellido="${libros.apellido}" data-libros="${libros.username}" data-email="${libros.correoelectronico}" >
+                  <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+                </a>
+
+                <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="${libros.id}">
+                  <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                </a>
+              </td>
+            </tr>
+          `;
+          // Insertar la fila en el tbody
+          tableBody.innerHTML += row;
+        });
+
+        let IdUsuario; // Variable para almacenar el ID del usuario a eliminar
+
+
+       // Función para manejar el envío del formulario
+        function manejarEnvioFormulario(event) {
+          event.preventDefault();
+
+          // Extraer los valores del formulario en el momento del submit
+          let datosNuevosEditUsuario = {
+            nombre: document.getElementById('nombreEditarUsuario').value,
+            apellido: document.getElementById('apellidoEditarUsuario').value,
+            username: document.getElementById('usernameEditarUsuario').value,
+            email: document.getElementById('emailEditarUsuario').value,
+            rol: parseInt(document.getElementById('rolEditarUsuario').value, 10)
+          };
+          
+          // Comparar los valores antiguos y nuevos
+          if (JSON.stringify(datosAnterioresEditUsuario) !== JSON.stringify(datosNuevosEditUsuario)) {
+            // Si algo cambió, ejecutar el PUT
+            // Realizar la solicitud PUT
+            fetch(`http://localhost:8080/usuarios/${IdUsuario}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                id_rol: data.IdRol,
+              },
+              body: JSON.stringify({username: datosNuevosEditUsuario.username,
+              nombre: datosNuevosEditUsuario.nombre,
+              apellido: datosNuevosEditUsuario.apellido,
+              correoelectronico: datosNuevosEditUsuario.email,
+              rol: {
+                idRol: datosNuevosEditUsuario.rol
+              }}),
+            })
+              .then((response) => {
+                console.log(response);
+                $("#editEmployeeModal").modal("hide");
+                //Actualizar crud Usuarios
+                administrarLibros(dataTokenUsuario);
               })
               .catch((error) => {
                 console.error("Error:", error);
