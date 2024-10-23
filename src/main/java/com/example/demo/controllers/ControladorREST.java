@@ -143,13 +143,25 @@ public class ControladorREST {
             Optional<Usuarios> usuarioExistenteOpt = usuariosRepository.findById(id);
             if (usuarioExistenteOpt.isPresent()) {
                 Usuarios usuarioExistente = usuarioExistenteOpt.get();
-                // Actualizar solo si los valores son proporcionados
-                if (usuarioActualizado.getNombre() != null && !usuarioActualizado.getNombre().isEmpty()) {
+    
+                // Actualizar todos los campos directamente
+                if (usuarioActualizado.getNombre() != null) {
                     usuarioExistente.setNombre(usuarioActualizado.getNombre());
                 }
-                if (usuarioActualizado.getApellido() != null && !usuarioActualizado.getApellido().isEmpty()) {
+                if (usuarioActualizado.getApellido() != null) {
                     usuarioExistente.setApellido(usuarioActualizado.getApellido());
                 }
+                if (usuarioActualizado.getUsername() != null) {
+                    usuarioExistente.setUsername(usuarioActualizado.getUsername());
+                }
+                if (usuarioActualizado.getCorreoelectronico() != null) {
+                    usuarioExistente.setCorreoelectronico(usuarioActualizado.getCorreoelectronico());
+                }
+                if (usuarioActualizado.getRol() != null) {
+                    usuarioExistente.setRol(usuarioActualizado.getRol());
+                }
+                // Agrega más campos aquí según sea necesario
+    
                 usuariosRepository.save(usuarioExistente);
                 return new ResponseEntity<>("Usuario actualizado exitosamente", HttpStatus.OK);
             } else {
@@ -158,6 +170,7 @@ public class ControladorREST {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acceso denegado");
     }
+    
 
     // Nuevo método para la autenticación
     @PostMapping("/auth")
