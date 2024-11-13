@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subida de Imagen</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@latest/build/toastr.min.css">
+  <style>
+    .mdi-camera-flip-outline {
+      margin-top: -35px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 20px;
+      color: #858585;
+    }
+    .divider {
+      height: 1px;
+      width: 100%;
+      background: rgba(168, 168, 168, 0.285);
+      margin-top: 20px;
+    }
+    .dialog {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      width: 600px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    .dialog.open {
+      display: block;
+    }
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 15px;
+    }
+    .button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    .button.cancel {
+      background-color: #d9534f;
+      color: white;
+      border: none;
+    }
+    .button.save {
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+    }
+    .preview {
+      margin-top: 20px;
+      max-width: 100%;
+      max-height: 300px;
+    }
+  </style>
+</head>
+<body>
+
+  <i class="mdi-camera-flip-outline" onclick="openFileDialog()">Seleccionar imagen</i>
+
+  <div class="dialog" id="dialog">
+    <form id="formulario" onsubmit="crearUsuario(event)" enctype="multipart/form-data">
+      <div>
+        <p id="nombreArchivo"></p>
+        <div class="divider"></div>
+        <!-- Imagen de previsualización -->
+        <img id="imagePreview" class="preview" src="" alt="Previsualización de la imagen" style="display: none;">
+      </div>
+      <div class="actions">
+        <button type="button" class="button cancel" onclick="closeDialog()">Cancelar</button>
+        <button type="submit" class="button save">Guardar</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/toastr@latest/build/toastr.min.js"></script>
+  <script>
+    let dialog = document.getElementById('dialog');
+    let userData = null;
+    let nombreArchivoElement = document.getElementById('nombreArchivo');
+    let imagePreview = document.getElementById('imagePreview');
+
+    function openFileDialog() {
+      const inputFile = document.createElement('input');
+      inputFile.type = 'file';
+      inputFile.accept = 'image/*';
+
+      inputFile.addEventListener('change', handleImageChange);
+      inputFile.click();
+
+      // Abre el modal después de seleccionar el archivo
+      inputFile.addEventListener('change', function() {
+        if (inputFile.files.length > 0) {
+          dialog.classList.add('open'); // Muestra el modal
+        }
+      });
+    }
+
+    function handleImageChange(event) {
+      const file = event.target.files[0];
+      userData = file;
+      nombreArchivoElement.textContent = file.name;
+
+      // Mostrar la previsualización de la imagen
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreview.src = e.target.result; // Actualiza el src de la imagen de previsualización
+        imagePreview.style.display = 'block'; // Muestra la imagen
+      }
+      reader.readAsDataURL(file);
+    }
+
+    async function crearUsuario(event) {
+      event.preventDefault();
+
+      if (!userData) {
+        toastr.options.positionClass = 'toast-bottom-right';
+        toastr.error('Por favor, selecciona una imagen antes de guardar.');
+        return;
+      }
+
+      try {
+        const formData = new FormData();
+        formData.append('file', userData);
+
+        const perfilImagenFileURL = "URL_DEL_ARCHIVO"; // Cambia esto por tu URL
+        const codigoEncriptado = btoa(perfilImagenFileURL.split('InventarioEquipos/')[1]);
+
+        const response = await fetch(
+          `http://localhost:5050/api/file/file/InventarioEquiposComputo/SW52ZW50YXJpb0VxdXBvc2RlQ29tcHV0bw===&RGVzYXJvbGluZw==&UmFpei==&${codigoEncriptado}`,
+          {
+            method: 'PUT',
+            body: formData,
+            headers: {
+              // Nota: Fetch no necesita el header 'Content-Type' cuando usas FormData
+            }
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+
+          const perfilImagen = 'http://localhost:5050/uploads/InventarioEquipos/' + data.img;
+          console.log(perfilImagen);
+          
+        } else {
+          toastr.options.positionClass = 'toast-bottom-right';
+          toastr.error('Error al subir la imagen.');
+        }
+      } catch (error) {
+        console.error('Error al subir la imagen:', error);
+      }
+    }
+
+    function closeDialog() {
+      dialog.classList.remove('open');
+    }
+  </script>
+</body>
+</html>

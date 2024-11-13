@@ -51,6 +51,7 @@
     />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="inicioStyle.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastr@latest/build/toastr.min.css">
   </head>
   <body>
     <nav
@@ -98,6 +99,10 @@
               <li id="botonNavAdministrar" class="nav-item mx-0 mx-lg-1">
                 
               </li>
+
+              <li class="nav-item mx-0 mx-lg-1">
+                <a href="perfil"><div class="circuloMiPerfil" id="circuloMiPerfil"></div></a>
+              </li>
           </ul>
         </div>
       </div>
@@ -130,7 +135,7 @@
                 <th style="width: auto;">Apellido</th>
                 <th style="width: auto;">Email</th>
                 <th style="width: auto;">Rol</th>
-                <th style="width: auto;">Acciones</th>
+                <th >Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -176,7 +181,7 @@
               </div>
               <div class="col-sm-6">
                 <a
-                  href="#addEmployeeModal"
+                  href="#addLibroModal"
                   class="btn btn-success"
                   data-toggle="modal"
                   ><i class="material-icons">&#xE147;</i>
@@ -382,10 +387,173 @@
         </div>
       </div>
     </div>
+
+
+    <!-- Modales de libros -->
+
+
+
+
+    <!-- Delete Modal libro HTML -->
+    <div id="deleteLibroModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="deleteFormLibro">
+            <!-- Agregar un ID al formulario -->
+            <div class="modal-header">
+              <h4 class="modal-title">Eliminar Libro</h4>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Estas seguro que quieres eliminar este libro?</p>
+              <p class="text-warning">
+                <small>Esta accion no se puede deshacer.</small>
+              </p>
+            </div>
+            <div class="modal-footer">
+              <input
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+                value="Cancelar"
+              />
+              <input type="submit" class="btn btn-danger" value="Eliminar" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- add Modal HTML -->
+    <div id="addLibroModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="addLibroForm" enctype="multipart/form-data">
+            <div class="modal-header">
+              <h4 class="modal-title">Agregar Libro</h4>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Titulo</label>
+                <input type="text" id="tituloAgregarLibro" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Autor</label>
+                <input type="text" id="autorAgregarLibro" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Paginas</label>
+                <input type="number" id="paginasAgregarLibro" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Año de publicación</label>
+                <input type="number" id="añoAgregarLibro" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Precio</label>
+                <input type="number" id="precioAgregarLibro" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Genero</label>
+                <input type="text" id="generoAgregarLibro" class="form-control" required />
+              </div>
+
+              <label>Imagen</label>
+              <div class="mdi-camera-flip-outline" onclick="openFileDialog()">Seleccionar imagen <img id="imagePreview" class="preview" src="" alt="Previsualización de la imagen" style="display: none;"> <p style="text-align: center;" id="nombreArchivo"></p></div>
+              
+              
+            </div>
+            <div class="modal-footer">
+              <input
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+                value="Cancelar"
+              />
+              <input type="submit" class="btn btn-success" value="Crear" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Modal HTML -->
+    <div id="editLibroModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="editFormLibro">
+            <div class="modal-header">
+              <h4 class="modal-title">Editar Libro</h4>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Titulo</label>
+                <input type="text" id="tituloEditarLibro" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Autor</label>
+                <input type="text" id="autorEditarLibro" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Paginas</label>
+                <input type="number" id="paginasEditarLibro" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Año de publicación</label>
+                <input type="number" id="añoEditarLibro" class="form-control" required min="1900" />
+              </div>
+              <div class="form-group">
+                <label>Precio</label>
+                <input type="number" id="precioEditarLibro" class="form-control" required />
+              </div>
+              <div class="form-group">
+                <label>Genero</label>
+                <input type="text" id="generoEditarLibro" class="form-control" required />
+              </div>
+              <label>Imagen</label>
+              <div class="mdi-camera-flip-outline" onclick="openFileDialogLibro()">Seleccionar imagen <img id="imagePreviewLibro" class="preview" src="" alt="Previsualización de la imagen" style="display: none;"> <p style="text-align: center;" id="nombreArchivoEditarLibro"></p></div>
+            </div>
+            <div class="modal-footer">
+              <input
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+                value="Cancelar"
+              />
+              <input type="submit" class="btn btn-warning" value="Guardar" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
 
-
+<script src="https://cdn.jsdelivr.net/npm/toastr@latest/build/toastr.min.js"></script>
 <script>
   //Variables globales
   let dataTokenUsuario = {}
@@ -412,6 +580,10 @@
           }
         })
         .then((data) => {
+          const botonCirculoMiPerfil = document.getElementById('circuloMiPerfil');
+              const capitalizedSub = data.sub.charAt(0).toUpperCase()
+              botonCirculoMiPerfil.innerHTML = `<label style="color: black;font-size: 30px; cursor: pointer; margin-top: 8px">${capitalizedSub}</label>`;
+          IdRolUsuarioSacadoDeToken = data.IdRol
           if (data.IdRol == 1) {
             administrarUsuarios(data);
             administrarLibros(data)
@@ -513,7 +685,6 @@
               }}),
             })
               .then((response) => {
-                console.log(response);
                 $("#editEmployeeModal").modal("hide");
                 //Actualizar crud Usuarios
                 administrarUsuarios(dataTokenUsuario);
@@ -560,177 +731,16 @@
           document.getElementById("editFormUsuario").addEventListener("submit", manejarEnvioFormulario);
         });
 
-
-
-        // Interceptar el envío del formulario
-        document
-          .getElementById("deleteFormUsuario")
-          .addEventListener("submit", function (event) {
-            event.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
-            console.log(IdUsuario);
-            
-            // Realizar la solicitud DELETE
-            fetch(`http://localhost:8080/usuarios/${IdUsuario}`, {
-              method: "DELETE",
-              headers: {
-                "Content-Type": "application/json",
-                id_rol: data.IdRol,
-              },
-            })
-              .then((response) => {
-                console.log(response);
-                $("#deleteEmployeeModal").modal("hide");
-                //Actualizar crud Usuarios
-                administrarUsuarios(dataTokenUsuario);
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-              });
-          });
-      })
-      .catch((error) => {
-        console.error("Error al obtener los usuarios:", error);
-      });
-  }
-
-  function administrarLibros(data) {
-    // Hacer un fetch para obtener los libros según el rol
-    fetch("http://localhost:8080/libros", {
-      method: "GET",
-      headers: {
-        id_rol: data.IdRol, // Aquí envías el valor del id_rol
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Error en la solicitud");
-        }
-        return response.json(); // Convertimos la respuesta a JSON
-      })
-      .then((libros) => {
-        console.log(libros);
-        
-        // Seleccionar el tbody de la tabla
-        const tableBody = document.getElementById("librosTableBody");
-
-        // Limpiar cualquier contenido anterior
-        tableBody.innerHTML = "";
-
-        // Iterar sobre los libros y crear filas
-        libros.forEach((libros, index) => {
-          const row = `
-            <tr>
-              <td>${libros.titulo}</td>
-              <td>${libros.autor}</td>
-              <td>${libros.numeroPaginas}</td>
-              <td>${libros.anioPublicacion}</td>
-              <td>${libros.precio}</td>
-              <td>${libros.genero}</td>
-              <td>
-                <a href="#editEmployeeModal" class="edit" data-toggle="modal" data-id="${libros.id}" data-nombre="${libros.nombre}" data-apellido="${libros.apellido}" data-libros="${libros.username}" data-email="${libros.correoelectronico}" >
-                  <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
-                </a>
-
-                <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="${libros.id}">
-                  <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
-                </a>
-              </td>
-            </tr>
-          `;
-          // Insertar la fila en el tbody
-          tableBody.innerHTML += row;
-        });
-
-        let IdUsuario; // Variable para almacenar el ID del usuario a eliminar
-
-
-       // Función para manejar el envío del formulario
-        function manejarEnvioFormulario(event) {
-          event.preventDefault();
-
-          // Extraer los valores del formulario en el momento del submit
-          let datosNuevosEditUsuario = {
-            nombre: document.getElementById('nombreEditarUsuario').value,
-            apellido: document.getElementById('apellidoEditarUsuario').value,
-            username: document.getElementById('usernameEditarUsuario').value,
-            email: document.getElementById('emailEditarUsuario').value,
-            rol: parseInt(document.getElementById('rolEditarUsuario').value, 10)
-          };
-          
-          // Comparar los valores antiguos y nuevos
-          if (JSON.stringify(datosAnterioresEditUsuario) !== JSON.stringify(datosNuevosEditUsuario)) {
-            // Si algo cambió, ejecutar el PUT
-            // Realizar la solicitud PUT
-            fetch(`http://localhost:8080/usuarios/${IdUsuario}`, {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-                id_rol: data.IdRol,
-              },
-              body: JSON.stringify({username: datosNuevosEditUsuario.username,
-              nombre: datosNuevosEditUsuario.nombre,
-              apellido: datosNuevosEditUsuario.apellido,
-              correoelectronico: datosNuevosEditUsuario.email,
-              rol: {
-                idRol: datosNuevosEditUsuario.rol
-              }}),
-            })
-              .then((response) => {
-                console.log(response);
-                $("#editEmployeeModal").modal("hide");
-                //Actualizar crud Usuarios
-                administrarLibros(dataTokenUsuario);
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-              });
-            // Aquí va tu lógica de PUT
-          } else {
-            // Si no cambió nada, no hacer nada
-            alert("Los datos siguen iguales. Ningun dato se ha modificado");
-          }
-        }
-
         // Escuchar el evento de clic en el enlace de editar
-        $(document).on("click", ".edit", function () {
-          IdUsuario = $(this).data("id");
-          let nombreUsuario = $(this).data("nombre");
-          let apellidoUsuario = $(this).data("apellido");
-          let usernameUsuario = $(this).data("usuario");
-          let emailUsuario = $(this).data("email");
-          let rolUsuario = $(this).data("rol");
-
-          // Extraer los valores originales para referencia
-          document.getElementById('nombreEditarUsuario').value = nombreUsuario;
-          document.getElementById('apellidoEditarUsuario').value = apellidoUsuario;
-          document.getElementById('usernameEditarUsuario').value = usernameUsuario;
-          document.getElementById('emailEditarUsuario').value = emailUsuario;
-          document.getElementById('rolEditarUsuario').value = rolUsuario;
-
-          // Guardar los datos originales
-          datosAnterioresEditUsuario = {
-            nombre: nombreUsuario,
-            apellido: apellidoUsuario,
-            username: usernameUsuario,
-            email: emailUsuario,
-            rol: parseInt(rolUsuario, 10) // Asegúrate de que este valor sea un número
-          };
-
-          // Remover el evento submit anterior para evitar duplicados
-          document.getElementById("editFormUsuario").removeEventListener("submit", manejarEnvioFormulario);
-          
-          // Añadir el evento submit
-          document.getElementById("editFormUsuario").addEventListener("submit", manejarEnvioFormulario);
+        $(document).on("click", ".delete", function () {
+          IdUsuario = $(this).data("id");  
         });
-
-
 
         // Interceptar el envío del formulario
         document
           .getElementById("deleteFormUsuario")
           .addEventListener("submit", function (event) {
             event.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
-            console.log(IdUsuario);
             
             // Realizar la solicitud DELETE
             fetch(`http://localhost:8080/usuarios/${IdUsuario}`, {
@@ -741,7 +751,6 @@
               },
             })
               .then((response) => {
-                console.log(response);
                 $("#deleteEmployeeModal").modal("hide");
                 //Actualizar crud Usuarios
                 administrarUsuarios(dataTokenUsuario);
@@ -755,20 +764,18 @@
         console.error("Error al obtener los usuarios:", error);
       });
   }
-
 
   function crearUsuario(data) {
     return fetch('http://localhost:8080/usuarios', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        id_rol: IdUsuarioSacadoDeToken, 
+        id_rol: IdRolUsuarioSacadoDeToken, 
       },
       body: JSON.stringify(data) // Convertimos los datos a formato JSON
     })
     .then(response => response.json())
     .then(result => {
-      console.log('Success:', result);
       return result;
     })
     .catch(error => {
@@ -804,17 +811,395 @@
     // Llamar a la función crearUsuario con los datos obtenidos
     crearUsuario(data)
       .then(result => {
-        console.log(result);
         // Cerrar el modal y/o mostrar una notificación de éxito
         $('#addEmployeeModal').modal('hide');
+        document.getElementById("addEmployeeForm").reset();
         //Actualizar crud Usuarios
         administrarUsuarios(dataTokenUsuario)
       })
       .catch(error => {
         // Manejar errores, mostrar mensaje de error, etc.
         alert('Hubo un error al crear el usuario');
+        
       });
   });
+
+
+
+
+
+
+
+  function administrarLibros(data) {
+    // Hacer un fetch para obtener los libros según el rol
+    fetch("http://localhost:8080/libros", {
+      method: "GET",
+      headers: {
+        id_rol: data.IdRol, // Aquí envías el valor del id_rol
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error en la solicitud");
+        }
+        return response.json(); // Convertimos la respuesta a JSON
+      })
+      .then((libros) => {
+        // Seleccionar el tbody de la tabla
+        const tableBody = document.getElementById("librosTableBody");
+
+        // Limpiar cualquier contenido anterior
+        tableBody.innerHTML = "";
+
+        // Iterar sobre los libros y crear filas
+        libros.forEach((libros, index) => {
+          const row = `
+            <tr>
+              <td>${libros.titulo}</td>
+              <td>${libros.autor}</td>
+              <td>${libros.numeroPaginas}</td>
+              <td>${libros.anioPublicacion}</td>
+              <td>${libros.precio}</td>
+              <td>${libros.genero}</td>
+              <td>
+                <a href="#editLibroModal" class="editLibro" style="color: orange" data-toggle="modal" data-id="${libros.id}" data-titulo="${libros.titulo}" data-autor="${libros.autor}" data-paginas="${libros.numeroPaginas}" data-año="${libros.anioPublicacion}" data-precio="${libros.precio}" data-genero="${libros.genero}" data-imagenlibro="${libros.imagenLibroLink}" >
+                  <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
+                </a>
+
+                <a href="#deleteLibroModal" class="deleteLibro" style="color: red" data-toggle="modal" data-id="${libros.id}">
+                  <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                </a>
+              </td>
+            </tr>
+          `;
+          // Insertar la fila en el tbody
+          tableBody.innerHTML += row;
+        });
+
+        let IdLibro; // Variable para almacenar el ID del Libro a eliminar
+
+
+       // Función para manejar el envío del formulario
+        async function manejarEnvioFormularioEditarLibro(event) {
+          event.preventDefault();
+          let perfilImagen = null
+
+          if (imageData) {
+            
+          try {
+            const formData = new FormData();
+            formData.append('file', imageData);
+
+            const perfilImagenFileURL = "URL_DEL_ARCHIVO"; // Cambia esto por tu URL
+            const codigoEncriptado = btoa(perfilImagenFileURL.split('InventarioEquipos/')[1]);
+
+            const response = await fetch(
+              `http://localhost:5050/api/file/file/InventarioEquiposComputo/SW52ZW50YXJpb0VxdXBvc2RlQ29tcHV0bw===&RGVzYXJvbGluZw==&UmFpei==&${codigoEncriptado}`,
+              {
+                method: 'PUT',
+                body: formData,
+                headers: {
+                  // Nota: Fetch no necesita el header 'Content-Type' cuando usas FormData
+                }
+              }
+            );
+
+            if (response.ok) {
+              const dataImage = await response.json();
+
+              perfilImagen = 'http://localhost:5050/uploads/InventarioEquipos/' + dataImage.img;
+            } else {
+              toastr.options.positionClass = 'toast-bottom-right';
+              toastr.error('Error al subir la imagen.');
+            }
+          } catch (error) {
+            console.error('Error al subir la imagen:', error);
+          }
+        }
+        
+          // Extraer los valores del formulario en el momento del submit
+          let datosNuevosEditLibro = {
+            titulo: document.getElementById('tituloEditarLibro').value,
+            autor: document.getElementById('autorEditarLibro').value,
+            paginas: document.getElementById('paginasEditarLibro').value,
+            año: document.getElementById('añoEditarLibro').value,
+            precio: document.getElementById('precioEditarLibro').value,
+            genero: document.getElementById('generoEditarLibro').value,
+            imagenLibroLink: perfilImagen
+          };
+          
+          
+          // Comparar los valores antiguos y nuevos
+          if (JSON.stringify(datosAnterioresEditLibro) !== JSON.stringify(datosNuevosEditLibro)) {
+            
+            // Si algo cambió, ejecutar el PUT
+            // Realizar la solicitud PUT
+            fetch(`http://localhost:8080/libros/${IdLibro}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+                id_rol: data.IdRol,
+              },
+              body: JSON.stringify({
+              titulo: datosNuevosEditLibro.titulo,
+              autor: datosNuevosEditLibro.autor,
+              numeroPaginas: datosNuevosEditLibro.paginas,
+              anioPublicacion: datosNuevosEditLibro.año,
+              precio: datosNuevosEditLibro.precio,
+              genero: datosNuevosEditLibro.genero,
+              imagenLibroLink: perfilImagen
+              }),
+            })
+              .then((response) => {
+                $("#editLibroModal").modal("hide");
+                //Actualizar crud Libros
+                administrarLibros(dataTokenUsuario);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+            // Aquí va tu lógica de PUT
+          } else {
+            // Si no cambió nada, no hacer nada
+            alert("Los datos siguen iguales. Ningun dato se ha modificado");
+          }
+        }
+
+        // Escuchar el evento de clic en el enlace de editar
+        $(document).on("click", ".editLibro", function () {
+          IdLibro = $(this).data("id");
+          let tituloLibro = $(this).data("titulo");
+          let autorLibro = $(this).data("autor");
+          let numeroPaginasLibro = $(this).data("paginas");  
+          let añoLibro = $(this).data("año");
+          let precioLibro = $(this).data("precio");
+          let generoLibro = $(this).data("genero");
+          let imagenLibroLink = $(this).data("imagenlibro");
+
+          // Extraer los valores originales para referencia
+          document.getElementById('tituloEditarLibro').value = tituloLibro;
+          document.getElementById('autorEditarLibro').value = autorLibro;
+          document.getElementById('paginasEditarLibro').value = numeroPaginasLibro;
+          document.getElementById('añoEditarLibro').value = añoLibro;
+          document.getElementById('precioEditarLibro').value = precioLibro;
+          document.getElementById('generoEditarLibro').value = generoLibro;
+          imagePreviewLibro.src = imagenLibroLink
+
+          // Guardar los datos originales
+          datosAnterioresEditLibro = {
+            titulo: tituloLibro,
+            autor: autorLibro,
+            paginas: numeroPaginasLibro,
+            año: añoLibro,
+            precio: precioLibro,
+            genero: generoLibro,
+            imagenLibroLink: imagenLibroLink
+          };
+
+          // Remover el evento submit anterior para evitar duplicados
+          document.getElementById("editFormLibro").removeEventListener("submit", manejarEnvioFormularioEditarLibro);
+          
+          // Añadir el evento submit
+          document.getElementById("editFormLibro").addEventListener("submit", manejarEnvioFormularioEditarLibro);
+        });
+
+        // Escuchar el evento de clic en el enlace de editar
+        $(document).on("click", ".deleteLibro", function () {
+          IdLibro = $(this).data("id");  
+        });
+
+
+
+        // Interceptar el envío del formulario
+        document
+          .getElementById("deleteFormLibro")
+          .addEventListener("submit", function (event) {
+            event.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
+            
+            // Realizar la solicitud DELETE
+            fetch(`http://localhost:8080/libros/${IdLibro}`, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                id_rol: data.IdRol,
+              },
+            })
+              .then((response) => {
+                $("#deleteLibroModal").modal("hide");
+                //Actualizar crud Libros
+                administrarLibros(dataTokenUsuario);
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+              });
+          });
+      })
+      .catch((error) => {
+        console.error("Error al obtener los usuarios:", error);
+      });
+  }
+
+  function crearLibro(data) {
+    
+    return fetch('http://localhost:8080/libros', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        id_rol: IdRolUsuarioSacadoDeToken, 
+      },
+      body: JSON.stringify(data) // Convertimos los datos a formato JSON
+    })
+    .then(response => response.json())
+    .then(result => {
+      return result;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error;
+    });
+  }
+
+  // Manejar el envío del formulario de crear usuario
+  document.getElementById('addLibroForm').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+    let perfilImagen = null
+
+    // Extraer los valores de los campos del formulario
+    const titulo = document.getElementById('tituloAgregarLibro').value;
+    const autor = document.getElementById('autorAgregarLibro').value;
+    const paginas = document.getElementById('paginasAgregarLibro').value;
+    const año = document.getElementById('añoAgregarLibro').value;
+    const precio = document.getElementById('precioAgregarLibro').value;
+    const genero = document.getElementById('generoAgregarLibro').value;
+
+      if (!imageData) {
+        toastr.options.positionClass = 'toast-bottom-right';
+        toastr.error('Por favor, selecciona una imagen antes de guardar.');
+        return;
+      }
+
+      try {
+        const formData = new FormData();
+        formData.append('file', imageData);
+
+        const perfilImagenFileURL = "URL_DEL_ARCHIVO"; // Cambia esto por tu URL
+        const codigoEncriptado = btoa(perfilImagenFileURL.split('InventarioEquipos/')[1]);
+
+        const response = await fetch(
+          `http://localhost:5050/api/file/file/InventarioEquiposComputo/SW52ZW50YXJpb0VxdXBvc2RlQ29tcHV0bw===&RGVzYXJvbGluZw==&UmFpei==&${codigoEncriptado}`,
+          {
+            method: 'PUT',
+            body: formData,
+            headers: {
+              // Nota: Fetch no necesita el header 'Content-Type' cuando usas FormData
+            }
+          }
+        );
+
+        if (response.ok) {
+          const dataImage = await response.json();
+
+          perfilImagen = 'http://localhost:5050/uploads/InventarioEquipos/' + dataImage.img;
+        } else {
+          toastr.options.positionClass = 'toast-bottom-right';
+          toastr.error('Error al subir la imagen.');
+        }
+      } catch (error) {
+        console.error('Error al subir la imagen:', error);
+      }
+      
+
+    // Crear el objeto con los datos del formulario
+    const data = {
+      titulo: titulo,
+      autor: autor,
+      numeroPaginas: paginas,
+      anioPublicacion: año,
+      precio: precio,
+      genero: genero,
+      imagenLibroLink: perfilImagen,
+    };
+    
+    // Llamar a la función crearUsuario con los datos obtenidos
+    crearLibro(data)
+      .then(result => {
+        // Cerrar el modal y/o mostrar una notificación de éxito
+        $('#addLibroModal').modal('hide');
+        document.getElementById("addLibroForm").reset();
+        //Actualizar crud Usuarios
+        administrarLibros(dataTokenUsuario)
+      })
+      .catch(error => {
+        // Manejar errores, mostrar mensaje de error, etc.
+        alert('Hubo un error al crear el libro');
+      });
+  });
+
+
+
+    let dialog = document.getElementById('dialog');
+    let imageData = null;
+    let nombreArchivoElement = document.getElementById('nombreArchivo');
+    let nombreArchivoElementEditarLibro = document.getElementById('nombreArchivoEditarLibro');
+    let imagePreview = document.getElementById('imagePreview');
+    let imagePreviewLibro = document.getElementById('imagePreviewLibro');
+
+    imagePreviewLibro.src = null;
+    imagePreviewLibro.style.display = 'block'; // Muestra la imagen
+    
+
+    function openFileDialog() {
+      const inputFile = document.createElement('input');
+      inputFile.type = 'file';
+      inputFile.accept = 'image/*';
+
+      inputFile.addEventListener('change', handleImageChange);
+      inputFile.click();
+
+      
+    }
+
+    function openFileDialogLibro() {
+      const inputFile = document.createElement('input');
+      inputFile.type = 'file';
+      inputFile.accept = 'image/*';
+
+      inputFile.addEventListener('change', handleImageChangeLibro);
+      inputFile.click();
+
+      
+    }
+
+    function handleImageChange(event) {
+      const file = event.target.files[0];
+      imageData = file;
+      nombreArchivoElement.textContent = file.name;
+
+      // Mostrar la previsualización de la imagen
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreview.src = e.target.result; // Actualiza el src de la imagen de previsualización
+        imagePreview.style.display = 'block'; // Muestra la imagen
+      }
+      reader.readAsDataURL(file);
+    }
+
+    function handleImageChangeLibro(event) {
+      const file = event.target.files[0];
+      imageData = file;
+      nombreArchivoElementEditarLibro.textContent = file.name;
+
+      // Mostrar la previsualización de la imagen
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imagePreviewLibro.src = e.target.result; // Actualiza el src de la imagen de previsualización
+        imagePreviewLibro.style.display = 'block'; // Muestra la imagen
+      }
+      reader.readAsDataURL(file);
+    }
+
+  
+
 
   //Boton cerrar sesion
   document.getElementById('botonCerrarSesion').addEventListener('click', function() {

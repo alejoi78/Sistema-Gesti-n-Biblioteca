@@ -349,42 +349,6 @@ public class ControladorREST {
         }
     }
 
-
-    // Método para editar un usuario existente (HTTP PUT)
-    @PutMapping("/editar/{id}")
-    public ResponseEntity<String> editarUsuario(@PathVariable int id,
-            @RequestBody UserRegistrationDetails registrationDetails) {
-        Optional<Usuarios> usuarioExistente = usuariosRepository.findById(id);
-
-        if (usuarioExistente.isPresent()) {
-            Usuarios usuario = usuarioExistente.get();
-            usuario.setCorreoelectronico(registrationDetails.getcorreoelectronico());
-
-            // Actualizar la contraseña si es necesario
-            if (registrationDetails.getPassword() != null && !registrationDetails.getPassword().isEmpty()) {
-                usuario.setPassword(passwordEncoder.encode(registrationDetails.getPassword()));
-            }
-
-            usuariosRepository.save(usuario);
-            return new ResponseEntity<>("Usuario actualizado exitosamente.", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Usuario no encontrado.", HttpStatus.NOT_FOUND);
-        }
-    }
-
-    // Método para eliminar un usuario existente (HTTP DELETE)
-    @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<String> eliminarUsuario(@PathVariable int id) {
-        Optional<Usuarios> usuarioExistente = usuariosRepository.findById(id);
-
-        if (usuarioExistente.isPresent()) {
-            usuariosRepository.deleteById(id);
-            return new ResponseEntity<>("Usuario eliminado exitosamente.", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Usuario no encontrado.", HttpStatus.NOT_FOUND);
-        }
-    }
-
     //Insertar automaticamente los roles en la base de datos
     @Configuration
     public class LoadDatabase {

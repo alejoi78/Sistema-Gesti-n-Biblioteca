@@ -78,6 +78,10 @@
               <li id="botonNavAdministrar" class="nav-item mx-0 mx-lg-1">
                 
               </li>
+
+              <li class="nav-item mx-0 mx-lg-1">
+                <a href="perfil"><div class="circuloMiPerfil" id="circuloMiPerfil"></div></a>
+              </li>
           </ul>
         </div>
       </div>
@@ -123,143 +127,8 @@
         <!-- Portfolio Grid Items-->
         <div class="row justify-content-center">
           <!-- Portfolio Item 1-->
-          <div class="col-md-6 col-lg-4 mb-5">
-            <div
-              class="portfolio-item mx-auto text-center"
-              data-bs-toggle="modal"
-              data-bs-target="#portfolioModal1"
-            >
-              <div
-                class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100"
-              >
-                <div
-                  class="portfolio-item-caption-content text-center text-white"
-                >
-                  <i class="fas fa-plus fa-3x"></i>
-                </div>
-              </div>
-              <img
-                class="img-fluid"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGmdal62uvC3dTW1tAQ3GPn6VfJFRAmMjOIw&s"
-                alt="..."
-              />
-            </div>
-          </div>
-          <!-- Portfolio Item 2-->
-          <div class="col-md-6 col-lg-4 mb-5">
-            <div
-              class="portfolio-item mx-auto text-center"
-              data-bs-toggle="modal"
-              data-bs-target="#portfolioModal2"
-            >
-              <div
-                class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100"
-              >
-                <div
-                  class="portfolio-item-caption-content text-center text-white"
-                >
-                  <i class="fas fa-plus fa-3x"></i>
-                </div>
-              </div>
-              <img
-                class="img-fluid"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGmdal62uvC3dTW1tAQ3GPn6VfJFRAmMjOIw&s"
-                alt="..."
-              />
-            </div>
-          </div>
-          <!-- Portfolio Item 3-->
-          <div class="col-md-6 col-lg-4 mb-5">
-            <div
-              class="portfolio-item mx-auto text-center"
-              data-bs-toggle="modal"
-              data-bs-target="#portfolioModal3"
-            >
-              <div
-                class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100"
-              >
-                <div
-                  class="portfolio-item-caption-content text-center text-white"
-                >
-                  <i class="fas fa-plus fa-3x"></i>
-                </div>
-              </div>
-              <img
-                class="img-fluid"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGmdal62uvC3dTW1tAQ3GPn6VfJFRAmMjOIw&s"
-                alt="..."
-              />
-            </div>
-          </div>
-          <!-- Portfolio Item 4-->
-          <div class="col-md-6 col-lg-4 mb-5 mb-lg-0">
-            <div
-              class="portfolio-item mx-auto text-center"
-              data-bs-toggle="modal"
-              data-bs-target="#portfolioModal4"
-            >
-              <div
-                class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100"
-              >
-                <div
-                  class="portfolio-item-caption-content text-center text-white"
-                >
-                  <i class="fas fa-plus fa-3x"></i>
-                </div>
-              </div>
-              <img
-                class="img-fluid"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGmdal62uvC3dTW1tAQ3GPn6VfJFRAmMjOIw&s"
-                alt="..."
-              />
-            </div>
-          </div>
-          <!-- Portfolio Item 5-->
-          <div class="col-md-6 col-lg-4 mb-5 mb-md-0">
-            <div
-              class="portfolio-item mx-auto text-center"
-              data-bs-toggle="modal"
-              data-bs-target="#portfolioModal5"
-            >
-              <div
-                class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100"
-              >
-                <div
-                  class="portfolio-item-caption-content text-center text-white"
-                >
-                  <i class="fas fa-plus fa-3x"></i>
-                </div>
-              </div>
-              <img
-                class="img-fluid"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGmdal62uvC3dTW1tAQ3GPn6VfJFRAmMjOIw&s"
-                alt="..."
-              />
-            </div>
-          </div>
-          <!-- Portfolio Item 6-->
-          <div class="col-md-6 col-lg-4">
-            <div
-              class="portfolio-item mx-auto text-center"
-              data-bs-toggle="modal"
-              data-bs-target="#portfolioModal6"
-            >
-              <div
-                class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100"
-              >
-                <div
-                  class="portfolio-item-caption-content text-center text-white"
-                >
-                  <i class="fas fa-plus fa-3x"></i>
-                </div>
-              </div>
-              <img
-                class="img-fluid" style="margin: auto;"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGmdal62uvC3dTW1tAQ3GPn6VfJFRAmMjOIw&s"
-                alt="..."
-              />
-            </div>
-          </div>
+          <div id="portfolioContainer" class="row"></div>
+          
         </div>
       </div>
     </section>
@@ -280,17 +149,12 @@
         <div class="row">
           <div class="col-lg-4 ms-auto">
             <p class="lead">
-              Freelancer is a free bootstrap theme created by Start Bootstrap.
-              The download includes the complete source files including HTML,
-              CSS, and JavaScript as well as optional SASS stylesheets for easy
-              customization.
+              BookHaven es una librería moderna creada para los amantes de los libros. Nos especializamos en ofrecer una amplia variedad de títulos. En BookHaven, creemos que cada libro tiene el poder de transformar una vida, y nos esforzamos por hacer que cada lectura sea una experiencia única.
             </p>
           </div>
           <div class="col-lg-4 me-auto">
             <p class="lead">
-              You can create your own custom avatar for the masthead, change the
-              icon in the dividers, and add your email address to the contact
-              form to make it fully functional!
+              Contamos con un equipo apasionado por la literatura y el conocimiento, dispuesto a ayudarte a encontrar el libro perfecto para cada ocasión. Además, nuestra plataforma en línea te permite explorar nuestro catálogo de manera fácil y cómoda, para que puedas disfrutar de la lectura desde la comodidad de tu hogar.
             </p>
           </div>
         </div>
@@ -301,7 +165,7 @@
             href="https://startbootstrap.com/theme/freelancer/"
           >
             <i class="fas fa-download me-2"></i>
-            Free Download!
+            Mas Informacion
           </a>
         </div>
       </div>
@@ -425,16 +289,16 @@
         <div class="row">
           <!-- Footer Location-->
           <div class="col-lg-4 mb-5 mb-lg-0">
-            <h4 class="text-uppercase mb-4">Location</h4>
+            <h4 class="text-uppercase mb-4">Locacion</h4>
             <p class="lead mb-0">
-              2215 John Daniel Drive
+              Cl. 54a #30-01, Medellín
               <br />
-              Clark, MO 65243
+              Villa Hermosa, Medellín, Antioquia
             </p>
           </div>
           <!-- Footer Social Icons-->
           <div class="col-lg-4 mb-5 mb-lg-0">
-            <h4 class="text-uppercase mb-4">Around the Web</h4>
+            <h4 class="text-uppercase mb-4">Nuestras redes</h4>
             <a class="btn btn-outline-light btn-social mx-1" href="#!"
               ><i class="fab fa-fw fa-facebook-f"></i
             ></a>
@@ -450,12 +314,10 @@
           </div>
           <!-- Footer About Text-->
           <div class="col-lg-4">
-            <h4 class="text-uppercase mb-4">About Freelancer</h4>
+            <h4 class="text-uppercase mb-4">Correos de contacto</h4>
             <p class="lead mb-0">
-              Freelance is a free to use, MIT licensed Bootstrap theme created
-              by
-              <a href="http://startbootstrap.com">Start Bootstrap</a>
-              .
+              BookHavenMedellin@gmail.com
+              BookHavenContacto@gmail.com
             </p>
           </div>
         </div>
@@ -464,376 +326,13 @@
     <!-- Copyright Section-->
     <div class="copyright py-4 text-center text-white">
       <div class="container">
-        <small>Copyright &copy; Your Website 2023</small>
+        <small>Copyright &copy; BookHaven 2024</small>
       </div>
     </div>
     <!-- Portfolio Modals-->
     <!-- Portfolio Modal 1-->
-    <div
-      class="portfolio-modal modal fade"
-      id="portfolioModal1"
-      tabindex="-1"
-      aria-labelledby="portfolioModal1"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <button
-              class="btn-close"
-              type="button"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body text-center pb-5">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-lg-8">
-                  <!-- Portfolio Modal - Title-->
-                  <h2
-                    class="portfolio-modal-title text-secondary text-uppercase mb-0"
-                  >
-                    Log Cabin
-                  </h2>
-                  <!-- Icon Divider-->
-                  <div class="divider-custom">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon">
-                      <i class="fas fa-star"></i>
-                    </div>
-                    <div class="divider-custom-line"></div>
-                  </div>
-                  <!-- Portfolio Modal - Image-->
-                  <img
-                    class="img-fluid rounded mb-5"
-                    src="assets/img/portfolio/cabin.png"
-                    alt="..."
-                  />
-                  <!-- Portfolio Modal - Text-->
-                  <p class="mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Mollitia neque assumenda ipsam nihil, molestias magnam,
-                    recusandae quos quis inventore quisquam velit asperiores,
-                    vitae? Reprehenderit soluta, eos quod consequuntur itaque.
-                    Nam.
-                  </p>
-                  <button class="btn btn-primary" data-bs-dismiss="modal">
-                    <i class="fas fa-xmark fa-fw"></i>
-                    Close Window
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Portfolio Modal 2-->
-    <div
-      class="portfolio-modal modal fade"
-      id="portfolioModal2"
-      tabindex="-1"
-      aria-labelledby="portfolioModal2"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <button
-              class="btn-close"
-              type="button"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body text-center pb-5">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-lg-8">
-                  <!-- Portfolio Modal - Title-->
-                  <h2
-                    class="portfolio-modal-title text-secondary text-uppercase mb-0"
-                  >
-                    Tasty Cake
-                  </h2>
-                  <!-- Icon Divider-->
-                  <div class="divider-custom">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon">
-                      <i class="fas fa-star"></i>
-                    </div>
-                    <div class="divider-custom-line"></div>
-                  </div>
-                  <!-- Portfolio Modal - Image-->
-                  <img
-                    class="img-fluid rounded mb-5"
-                    src="assets/img/portfolio/cake.png"
-                    alt="..."
-                  />
-                  <!-- Portfolio Modal - Text-->
-                  <p class="mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Mollitia neque assumenda ipsam nihil, molestias magnam,
-                    recusandae quos quis inventore quisquam velit asperiores,
-                    vitae? Reprehenderit soluta, eos quod consequuntur itaque.
-                    Nam.
-                  </p>
-                  <button class="btn btn-primary" data-bs-dismiss="modal">
-                    <i class="fas fa-xmark fa-fw"></i>
-                    Close Window
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Portfolio Modal 3-->
-    <div
-      class="portfolio-modal modal fade"
-      id="portfolioModal3"
-      tabindex="-1"
-      aria-labelledby="portfolioModal3"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <button
-              class="btn-close"
-              type="button"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body text-center pb-5">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-lg-8">
-                  <!-- Portfolio Modal - Title-->
-                  <h2
-                    class="portfolio-modal-title text-secondary text-uppercase mb-0"
-                  >
-                    Circus Tent
-                  </h2>
-                  <!-- Icon Divider-->
-                  <div class="divider-custom">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon">
-                      <i class="fas fa-star"></i>
-                    </div>
-                    <div class="divider-custom-line"></div>
-                  </div>
-                  <!-- Portfolio Modal - Image-->
-                  <img
-                    class="img-fluid rounded mb-5"
-                    src="assets/img/portfolio/circus.png"
-                    alt="..."
-                  />
-                  <!-- Portfolio Modal - Text-->
-                  <p class="mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Mollitia neque assumenda ipsam nihil, molestias magnam,
-                    recusandae quos quis inventore quisquam velit asperiores,
-                    vitae? Reprehenderit soluta, eos quod consequuntur itaque.
-                    Nam.
-                  </p>
-                  <button class="btn btn-primary" data-bs-dismiss="modal">
-                    <i class="fas fa-xmark fa-fw"></i>
-                    Close Window
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Portfolio Modal 4-->
-    <div
-      class="portfolio-modal modal fade"
-      id="portfolioModal4"
-      tabindex="-1"
-      aria-labelledby="portfolioModal4"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <button
-              class="btn-close"
-              type="button"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body text-center pb-5">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-lg-8">
-                  <!-- Portfolio Modal - Title-->
-                  <h2
-                    class="portfolio-modal-title text-secondary text-uppercase mb-0"
-                  >
-                    Controller
-                  </h2>
-                  <!-- Icon Divider-->
-                  <div class="divider-custom">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon">
-                      <i class="fas fa-star"></i>
-                    </div>
-                    <div class="divider-custom-line"></div>
-                  </div>
-                  <!-- Portfolio Modal - Image-->
-                  <img
-                    class="img-fluid rounded mb-5"
-                    src="assets/img/portfolio/game.png"
-                    alt="..."
-                  />
-                  <!-- Portfolio Modal - Text-->
-                  <p class="mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Mollitia neque assumenda ipsam nihil, molestias magnam,
-                    recusandae quos quis inventore quisquam velit asperiores,
-                    vitae? Reprehenderit soluta, eos quod consequuntur itaque.
-                    Nam.
-                  </p>
-                  <button class="btn btn-primary" data-bs-dismiss="modal">
-                    <i class="fas fa-xmark fa-fw"></i>
-                    Close Window
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Portfolio Modal 5-->
-    <div
-      class="portfolio-modal modal fade"
-      id="portfolioModal5"
-      tabindex="-1"
-      aria-labelledby="portfolioModal5"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <button
-              class="btn-close"
-              type="button"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body text-center pb-5">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-lg-8">
-                  <!-- Portfolio Modal - Title-->
-                  <h2
-                    class="portfolio-modal-title text-secondary text-uppercase mb-0"
-                  >
-                    Locked Safe
-                  </h2>
-                  <!-- Icon Divider-->
-                  <div class="divider-custom">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon">
-                      <i class="fas fa-star"></i>
-                    </div>
-                    <div class="divider-custom-line"></div>
-                  </div>
-                  <!-- Portfolio Modal - Image-->
-                  <img
-                    class="img-fluid rounded mb-5"
-                    src="assets/img/portfolio/safe.png"
-                    alt="..."
-                  />
-                  <!-- Portfolio Modal - Text-->
-                  <p class="mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Mollitia neque assumenda ipsam nihil, molestias magnam,
-                    recusandae quos quis inventore quisquam velit asperiores,
-                    vitae? Reprehenderit soluta, eos quod consequuntur itaque.
-                    Nam.
-                  </p>
-                  <button class="btn btn-primary" data-bs-dismiss="modal">
-                    <i class="fas fa-xmark fa-fw"></i>
-                    Close Window
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Portfolio Modal 6-->
-    <div
-      class="portfolio-modal modal fade"
-      id="portfolioModal6"
-      tabindex="-1"
-      aria-labelledby="portfolioModal6"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-          <div class="modal-header border-0">
-            <button
-              class="btn-close"
-              type="button"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body text-center pb-5">
-            <div class="container">
-              <div class="row justify-content-center">
-                <div class="col-lg-8">
-                  <!-- Portfolio Modal - Title-->
-                  <h2
-                    class="portfolio-modal-title text-secondary text-uppercase mb-0"
-                  >
-                    Submarine
-                  </h2>
-                  <!-- Icon Divider-->
-                  <div class="divider-custom">
-                    <div class="divider-custom-line"></div>
-                    <div class="divider-custom-icon">
-                      <i class="fas fa-star"></i>
-                    </div>
-                    <div class="divider-custom-line"></div>
-                  </div>
-                  <!-- Portfolio Modal - Image-->
-                  <img
-                    class="img-fluid rounded mb-5"
-                    src="assets/img/portfolio/submarine.png"
-                    alt="..."
-                  />
-                  <!-- Portfolio Modal - Text-->
-                  <p class="mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Mollitia neque assumenda ipsam nihil, molestias magnam,
-                    recusandae quos quis inventore quisquam velit asperiores,
-                    vitae? Reprehenderit soluta, eos quod consequuntur itaque.
-                    Nam.
-                  </p>
-                  <button class="btn btn-primary" data-bs-dismiss="modal">
-                    <i class="fas fa-xmark fa-fw"></i>
-                    Close Window
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div id="modalContainer"></div>
+
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Core theme JS-->
@@ -844,6 +343,7 @@
 
 <script>
     const token = localStorage.getItem("token");
+    let dataUsuario = [];
 
     if (token) {
         // Verificar el token al cargar la página
@@ -862,11 +362,19 @@
             }
             })
             .then((data) => {
-            if (data.IdRol == 1) {
-            // Seccion de administrador
-            const botonNavAdministrar = document.getElementById('botonNavAdministrar');
-            botonNavAdministrar.innerHTML = `<a style="color: green;" class="nav-link py-3 px-0 px-lg-3 rounded" href="/administrar">Administrar</a>`;
-            }
+              dataUsuario = data;
+              
+              traerLibros();
+
+              const botonCirculoMiPerfil = document.getElementById('circuloMiPerfil');
+              const capitalizedSub = data.sub.charAt(0).toUpperCase()
+              botonCirculoMiPerfil.innerHTML = `<label style="color: black;text-align: center;font-size: 30px; cursor: pointer">${capitalizedSub}</label>`;
+
+              if (data.IdRol == 1) {
+              // Seccion de administrador
+              const botonNavAdministrar = document.getElementById('botonNavAdministrar');
+              botonNavAdministrar.innerHTML = `<a style="color: green;" class="nav-link py-3 px-0 px-lg-3 rounded" href="/administrar">Administrar</a>`;
+              }
             
             })
             .catch((error) => {
@@ -927,6 +435,124 @@
   // Eliminar el token del localStorage
   localStorage.removeItem('token'); // Reemplaza 'token' con la clave exacta que estás usando para almacenar el token
   location.reload();
-});
+  });
+
+  function traerLibros() {
+    // Hacer un fetch para obtener los libros según el rol
+    fetch("http://localhost:8080/libros", {
+        method: "GET",
+        headers: {
+            id_rol: dataUsuario.IdRol, // Aquí envías el valor del id_rol
+        },
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error("Error en la solicitud");
+        }
+        return response.json(); // Convertimos la respuesta a JSON
+    })
+    .then((libros) => {
+        const portfolioContainer = document.getElementById("portfolioContainer"); // Contenedor donde se agregarán las tarjetas
+        const modalContainer = document.getElementById("modalContainer"); // Contenedor donde se agregarán los modales
+
+        libros.forEach((libro, index) => {
+            // Crear el contenido de la tarjeta de portafolio para cada libro
+            const cardHTML = `
+                <div class="col-md-6 col-lg-4 mb-5">
+                    <div class="portfolio-item mx-auto text-center" data-bs-toggle="modal" data-bs-target="#portfolioModal${index + 1}">
+                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                            <div class="portfolio-item-caption-content text-center text-white">
+                                <i class="fas fa-plus fa-3x"></i>
+                            </div>
+                        </div>
+                        <img style="height: 280px;" class="img-fluid" src="${libro.imagenLibroLink}" alt="${libro.titulo}" />
+                    </div>
+                </div>
+            `;
+
+            // Crear el modal para cada libro
+            const modalHTML = `
+                <div class="portfolio-modal modal fade" id="portfolioModal${index + 1}" tabindex="-1" aria-labelledby="portfolioModal${index + 1}" aria-hidden="true">
+                    <div class="modal-dialog modal-xl" >
+                        <div class="modal-content">
+                            <div class="modal-header border-0 pb-0" style="height: 70px;">
+                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center pb-5 pt-0">
+                                <div class="container">
+                                    <div class="row justify-content-center">
+                                        <div class="col-lg-8">
+                                            <!-- Título del libro -->
+                                            <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">${libro.titulo}</h2>
+                                            <!-- Icono separador -->
+                                            <div class="divider-custom">
+                                                <div class="divider-custom-line"></div>
+                                                <div class="divider-custom-icon">
+                                                    <i class="fas fa-star"></i>
+                                                </div>
+                                                <div class="divider-custom-line"></div>
+                                            </div>
+                                            <!-- Imagen del libro -->
+                                            <img class="img-fluid rounded mb-5" style="height: 280px;margin-bottom: 30px !important;" src="${libro.imagenLibroLink}" alt="${libro.titulo}" />
+                                            <!-- Descripción del libro -->
+                                           <div style="background-color: #e7e7e7;height=50px;height: 40px; border: 1px solid gray;">Detalles Del Producto</div>
+                                            <table style="width:100%; border-collapse: collapse; border-left: 1px solid gray; border-right: 1px solid gray; border-bottom: 1px solid gray;">
+                                                <tr>
+                                                    <td style="padding: 8px; font-weight: bold; border-right: 1px solid gray; border-bottom: 1px solid gray;background-color: #e7e7e74f;">Título:</td>
+                                                    <td style="padding: 8px; border-bottom: 1px solid gray;">${libro.titulo}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 8px; font-weight: bold; border-right: 1px solid gray; border-bottom: 1px solid gray;background-color: #e7e7e74f;">Autor:</td>
+                                                    <td style="padding: 8px; border-bottom: 1px solid gray;">${libro.autor}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 8px; font-weight: bold; border-right: 1px solid gray; border-bottom: 1px solid gray;background-color: #e7e7e74f;">Páginas:</td>
+                                                    <td style="padding: 8px; border-bottom: 1px solid gray;">${libro.numeroPaginas}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 8px; font-weight: bold; border-right: 1px solid gray; border-bottom: 1px solid gray;background-color: #e7e7e74f;">Año:</td>
+                                                    <td style="padding: 8px; border-bottom: 1px solid gray;">${libro.anioPublicacion}</td>
+                                                </tr>
+                                                
+                                                <tr>
+                                                    <td style="padding: 8px; font-weight: bold; border-bottom: 1px solid gray;border-right: 1px solid gray;background-color: #e7e7e74f;">Género:</td>
+                                                    <td style="padding: 8px;border-bottom: 1px solid gray;">${libro.genero}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="padding: 8px; font-weight: bold; border-right: 1px solid gray;background-color: #6eff00;">Precio:</td>
+                                                    <td style="padding: 8px;background-color: #6eff00;">${libro.precio} COP</td>
+                                                </tr>
+                                            </table>
+
+
+
+                                            <button class="btn btn-danger mt-3" data-bs-dismiss="modal">
+                                                <i class="fas fa-xmark fa-fw"></i>
+                                                Cerrar ventana
+                                            </button>
+                                            <button class="btn btn-success mt-3" data-bs-dismiss="modal">
+                                                <i class="fas fa-check fa-fw"></i>
+                                                Comprar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Insertar el HTML en el contenedor
+            portfolioContainer.innerHTML += cardHTML;
+            modalContainer.innerHTML += modalHTML;
+        });
+    })
+    .catch((error) => {
+        console.error("Error en la solicitud:", error);
+    });
+}
+
+
 
 </script>

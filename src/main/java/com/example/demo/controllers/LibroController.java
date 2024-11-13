@@ -6,27 +6,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.demo.LibrosRegistrationDetails;
 import com.example.demo.models.Libros;
+import com.example.demo.models.Usuarios;
 import com.example.demo.repositories.LibroRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/libros")
 public class LibroController {
 
     @Autowired
     private LibroRepository LibroRepository;
 
-    // Página de inicio
-    @GetMapping("/libros")
-    public String inicio() {
-        return "index";
-    }
 
     // Obtener todos los libros
-    @GetMapping
+    @GetMapping("/libros")
     @ResponseBody
     public ResponseEntity<List<Libros>> obtenerLibros() {
         List<Libros> libros = LibroRepository.findAll();
@@ -42,7 +38,7 @@ public class LibroController {
     }
 
     // Agregar un nuevo libro
-    @PostMapping
+    @PostMapping("/libros")
     @ResponseBody
     public ResponseEntity<Libros> agregarLibro(@RequestBody Libros nuevoLibro) {
         Libros libroGuardado = LibroRepository.save(nuevoLibro);
@@ -65,6 +61,22 @@ public class LibroController {
             if (libroActualizado.getAutor() != null && !libroActualizado.getAutor().isEmpty()) {
                 libroExistente.setAutor(libroActualizado.getAutor());
             }
+            if (libroActualizado.getNumeroPaginas() > 0) {
+                libroExistente.setNumeroPaginas(libroActualizado.getNumeroPaginas());
+            }
+            if (libroActualizado.getAnioPublicacion() > 0) {
+                libroExistente.setAnioPublicacion(libroActualizado.getAnioPublicacion());
+            }
+            if (libroActualizado.getPrecio() > 0) {
+                libroExistente.setPrecio(libroActualizado.getPrecio());
+            }
+            if (libroActualizado.getGenero() != null && !libroActualizado.getGenero().isEmpty()) {
+                libroExistente.setGenero(libroActualizado.getGenero());
+            }
+            if (libroActualizado.getImagenLibroLink() != null && !libroActualizado.getImagenLibroLink().isEmpty()) {
+                libroExistente.setImagenLibroLink(libroActualizado.getImagenLibroLink());
+            }
+
 
             // Guarda el libro actualizado
             LibroRepository.save(libroExistente);
@@ -74,35 +86,33 @@ public class LibroController {
             return new ResponseEntity<>("Libro no encontrado", HttpStatus.NOT_FOUND);
         }
     }
-    // borrar libro
-    @DeleteMapping("/libros/{id}")
+    
+// borrar libro
+@DeleteMapping("/libros/{id}")
+@ResponseBody
+public ResponseEntity<String> eliminarLibro(@PathVariable int id) {
+    System.out.println("Intentando eliminar libro con ID: " + id);
+    
+    if (LibroRepository.existsById(id)) {
+        LibroRepository.deleteById(id);
+        System.out.println("Libro eliminado: " + id);
+        return new ResponseEntity<>("Libro eliminado exitosamente", HttpStatus.OK);
+    } else {
+        System.out.println("Libro no encontrado: " + id);
+        return new ResponseEntity<>("Libro no encontrado", HttpStatus.NOT_FOUND);
+    }
+}
+
+    // Obtener libro por título
+    @GetMapping("/libros/{titulo}")
     @ResponseBody
-    public ResponseEntity<String> eliminarLibro(@PathVariable int id) {
-        System.out.println("Intentando eliminar libro con ID: " + id);
-        
-        if (LibroRepository.existsById(id)) {
-            LibroRepository.deleteById(id);
-            System.out.println("Libro eliminado: " + id);
-            return new ResponseEntity<>("Libro eliminado exitosamente", HttpStatus.OK);
-        } else {
-            System.out.println("Libro no encontrado: " + id);
-            return new ResponseEntity<>("Libro no encontrado", HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Libros> obtenerLibroPorTitulo(@PathVariable String titulo) {
+        Optional<Libros> libro = LibroRepository.findByTitulo(titulo);
+        return libro.map(ResponseEntity::ok).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Obtener libro por título, ignorando mayúsculas y minúsculas
-    @GetMapping("/libros/titulo/{titulo}")
-    public ResponseEntity<Libros> obtenerLibroPorTitulo(@PathVariable String titulo) {
-        // Busca el libro por título, ignorando diferencias entre mayúsculas y minúsculas
-        Optional<Libros> libro = LibroRepository.findByTitulo(titulo);
-
-        // Si se encuentra el libro, lo devuelve con el estado 200 OK
-        if (libro.isPresent()) {
-            return new ResponseEntity<>(libro.get(), HttpStatus.OK);
-        } else {
-            // Si no se encuentra, devuelve un estado 404 NOT FOUND
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        }
 }
+
+
+
 
