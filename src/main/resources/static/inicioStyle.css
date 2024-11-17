@@ -11087,6 +11087,11 @@ html {
   border-radius: 16px;
 }
 
+.tituloCambiarContraseña:hover {
+  background: #ff5722; /* Cambia el color de fondo al pasar el mouse */
+  color: black;       /* Cambia el color del texto */
+}
+
 .contenido {
   display: inline-block; /* Para que el contenido esté en la misma línea */
   padding: 10px;
@@ -11156,5 +11161,17 @@ html {
   max-height: 250px;
   margin: auto;
 }
+
+/* Cambiar el fondo y el texto de los mensajes de error */
+.toast-error {
+  background-color: #FF0000; /* Rojo */
+  color: #FFFFFF; /* Blanco */
+}
+
+.toast-success {
+  background-color: greenyellow; /* Rojo */
+  color: #FFFFFF; /* Blanco */
+}
+
 
 

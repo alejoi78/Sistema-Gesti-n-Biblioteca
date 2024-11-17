@@ -406,33 +406,6 @@ public class ControladorREST {
             };
         }
 
-        @PostMapping("/cambiar-contrasena")
-        public ResponseEntity<String> cambiarContrasena(
-                @RequestParam String username,
-                @RequestParam String contrasenaActual,
-                @RequestParam String nuevaContrasena) {
-
-            // Buscar usuario por username
-            Optional<Usuarios> usuarioOptional = usuariosRepository.findByUsername(username);
-
-            if (!usuarioOptional.isPresent()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
-            }
-
-            Usuarios usuario = usuarioOptional.get();
-
-            // Validar la contraseña actual
-            if (!passwordEncoder.matches(contrasenaActual, usuario.getPassword())) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña actual incorrecta");
-            }
-
-            // Guardar la nueva contraseña encriptada
-            usuario.setPassword(passwordEncoder.encode(nuevaContrasena));
-            usuariosRepository.save(usuario);
-
-            return ResponseEntity.ok("Contraseña actualizada exitosamente");
-        }
-
         @PostMapping("/cambiar-contrasenarecuperada")
         public ResponseEntity<String> cambiarContrasena(
                 @RequestParam String username,
@@ -460,4 +433,54 @@ public class ControladorREST {
         }
 
     }
+
+    @PutMapping("/usuarios/{id}/actualizar-contrasena")
+        @ResponseBody
+        public ResponseEntity<String> actualizarContrasena(
+                @PathVariable Integer id,
+                @RequestBody Map<String, String> contrasenaDatos) {
+            try {
+                // Obtener los datos del cuerpo de la solicitud
+                String contrasenaActual = contrasenaDatos.get("contrasenaActual");
+                String nuevaContrasena = contrasenaDatos.get("nuevaContrasena");
+                String confirmarContrasena = contrasenaDatos.get("confirmarContrasena");
+
+                // Validar que los datos no sean nulos o vacíos
+                if (contrasenaActual == null || nuevaContrasena == null || confirmarContrasena == null ||
+                    contrasenaActual.isEmpty() || nuevaContrasena.isEmpty() || confirmarContrasena.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Todos los campos son obligatorios.");
+                }
+
+                // Validar que la nueva contraseña y la confirmación coincidan
+                if (!nuevaContrasena.equals(confirmarContrasena)) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La nueva contraseña y la confirmación no coinciden.");
+                }
+
+                // Validar que la nueva contraseña cumpla los requisitos (ej. longitud mínima)
+                if (nuevaContrasena.length() < 8) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La nueva contraseña debe tener al menos 8 caracteres.");
+                }
+
+                // Buscar al usuario en la base de datos
+                Optional<Usuarios> usuarioOpt = usuariosRepository.findById(id);
+                if (usuarioOpt.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
+                }
+
+                Usuarios usuario = usuarioOpt.get();
+
+                // Verificar la contraseña actual
+                if (!passwordEncoder.matches(contrasenaActual, usuario.getPassword())) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("La contraseña actual es incorrecta.");
+                }
+
+                // Actualizar la contraseña
+                usuario.setPassword(passwordEncoder.encode(nuevaContrasena));
+                usuariosRepository.save(usuario);
+
+                return ResponseEntity.ok("Contraseña actualizada exitosamente.");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar la contraseña: " + e.getMessage());
+            }
+        }
 }

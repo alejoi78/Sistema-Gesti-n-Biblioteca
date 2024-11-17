@@ -64,7 +64,7 @@ public class ContraController {
             emailDetails.setTemporaryPassword(nuevaContraseña);
 
             // Enviar el correo de recuperación de contraseña
-            emailService.sendpassword(emailDetails);
+            emailService.sendPassword(emailDetails);
 
             System.out.println("Correo de recuperación enviado a: " + correoelectronico);
             return ResponseEntity.ok("Correo de recuperación enviado.");

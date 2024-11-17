@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import com.example.demo.mail.EmailServiceImpl;
 import com.example.demo.models.CompraRequest; // Asegúrate de que la importación sea correcta
 
 @RestController
@@ -31,6 +33,9 @@ public class ComprasController {
     private LibroRepository libroRepository;
 
     // Registrar una compra
+    @Autowired
+    private EmailServiceImpl emailService;
+
     @PostMapping("/comprar")
     @ResponseBody
     public ResponseEntity<Compras> registrarCompra(@RequestBody CompraRequest compraRequest) {
@@ -58,8 +63,26 @@ public class ComprasController {
         compra.setPrecio(libro.getPrecio());
 
         comprasRepository.save(compra);
+
+        // Enviar correo de confirmación en un nuevo hilo
+        new Thread(() -> {
+            try {
+                emailService.enviarCorreoCompra(
+                        usuario.getNombre(),
+                        usuario.getCorreoelectronico(),
+                        libro.getTitulo(),
+                        libro.getAutor(),
+                        libro.getPrecio(),
+                        compra.getFechaCompra());
+                System.out.println("Correo de confirmación enviado a: " + usuario.getCorreoelectronico());
+            } catch (Exception e) {
+                System.err.println("Error al enviar el correo de confirmación: " + e.getMessage());
+            }
+        }).start();
+
         return new ResponseEntity<>(compra, HttpStatus.CREATED);
     }
+
 
     // Listar todas las compras
     @GetMapping
