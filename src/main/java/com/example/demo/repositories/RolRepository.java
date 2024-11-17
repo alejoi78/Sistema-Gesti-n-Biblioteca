@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface RolRepository extends JpaRepository<Roles, Integer> {
     Roles findByTipodeRol(String tipodeRol);
-    Optional<Roles> findById(int idRol);  // Método personalizado
+
+    Optional<Roles> findById(int idRol); // Método personalizado
 }

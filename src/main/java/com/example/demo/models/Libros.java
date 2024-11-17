@@ -22,4 +22,5 @@ public class Libros {
     private double precio;
     private String genero;
     private String imagenLibroLink;
+
 }

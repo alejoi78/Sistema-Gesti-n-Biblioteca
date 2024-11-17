@@ -10,4 +10,6 @@ public interface EmailService {
 
     // Método para enviar un correo en formato HTML
     String sendHtmlMail(EmailDetails details);
+
+    String sendpassword(EmailDetails details);
 }

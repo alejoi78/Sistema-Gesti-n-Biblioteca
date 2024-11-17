@@ -63,70 +63,148 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    // Method 3: To send an email with HTML content
     @Override
-public String sendHtmlMail(EmailDetails details) {
-    try {
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-        helper.setFrom(sender);
-        helper.setTo(details.getRecipient());
-        helper.setSubject(details.getSubject());
+    public String sendHtmlMail(EmailDetails details) {
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+            helper.setFrom(sender);
+            helper.setTo(details.getRecipient());
+            helper.setSubject(details.getSubject());
+            String nombreUsuario = details.getNombre();
+            if (nombreUsuario == null || nombreUsuario.isEmpty()) {
+                nombreUsuario = "Usuario"; // Si el nombre está vacío o null, asigna un valor por defecto
+            }
 
-        // Contenido HTML
-        String htmlContent = """
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        background-color: #f4f4f4;
-                        padding: 20px;
-                    }
-                    .email-container {
-                        background-color: white;
-                        padding: 20px;
-                        border-radius: 10px;
-                        max-width: 600px;
-                        margin: auto;
-                        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                    }
-                    h1 {
-                        color: #333;
-                    }
-                    p {
-                        color: #666;
-                    }
-                    .footer {
-                        margin-top: 20px;
-                        text-align: center;
-                        font-size: 12px;
-                        color: #999;
-                    }
-                </style>
-            </head>
-            <body>
-                <div class="email-container">
-                    <h1>¡Bienvenido a Nuestra Empresa!</h1>
-                    <p>Gracias por unirte a nosotros. Estamos emocionados de tenerte a bordo.</p>
-                    <p>Si tienes alguna duda, no dudes en contactarnos.</p>
-                    <div class="footer">
-                        <p>© 2024 Nuestra Empresa. Todos los derechos reservados.</p>
-                    </div>
-                </div>
-            </body>
-            </html>
-            """;
+            // Contenido HTML usuario nuevo
+            String htmlContent = String.format(
+                    """
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                                <style>
+                                    body {
+                                        font-family: Arial, sans-serif;
+                                        background-color: #f4f4f4;
+                                        padding: 20px;
+                                    }
+                                    .email-container {
+                                        background-color: white;
+                                        padding: 20px;
+                                        border-radius: 10px;
+                                        max-width: 600px;
+                                        margin: auto;
+                                        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                                    }
+                                    h1 {
+                                        color: #333;
+                                    }
+                                    p {
+                                        color: #666;
+                                    }
+                                    .footer {
+                                        margin-top: 20px;
+                                        text-align: center;
+                                        font-size: 12px;
+                                        color: #999;
+                                    }
+                                </style>
+                            </head>
+                            <body>
+                                <div class="email-container">
+                                    <h1>¡Bienvenido a BookHaven!</h1>
+                                    <p>Hola %s,</p>
+                                    <p>Gracias por registrarte en BookHaven. Estamos emocionados de que te unas a nuestra comunidad.</p>
+                                    <p>Tu cuenta ha sido creada exitosamente.</p>
+                                    <div class="footer">
+                                        <p>© 2024 BookHaven. Todos los derechos reservados.</p>
+                                    </div>
+                                </div>
+                            </body>
+                            </html>
+                            """,
+                    nombreUsuario, details.getNombre());
 
-        helper.setText(htmlContent, true); // 'true' indica que el contenido es HTML
+            helper.setText(htmlContent, true); // 'true' indica que el contenido es HTML
 
-        javaMailSender.send(mimeMessage);
-        return "Correo HTML enviado exitosamente";
-    } catch (MessagingException e) {
-        return "Error al enviar el correo HTML";
+            javaMailSender.send(mimeMessage);
+            return "Correo HTML enviado exitosamente";
+        } catch (MessagingException e) {
+            return "Error al enviar el correo HTML";
+        }
     }
-}
+
+    // Método específico para el correo de recuperación de contraseña
+    @Override
+    public String sendpassword(EmailDetails details) {
+        try {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+            helper.setFrom(sender);
+            helper.setTo(details.getRecipient());
+            helper.setSubject("Recuperación de cuenta - BookHaven");
+
+            // Verifica si el nombre está disponible
+            String nombreUsuario = details.getNombre();
+            if (nombreUsuario == null || nombreUsuario.isEmpty()) {
+                nombreUsuario = "Usuario"; // Si el nombre está vacío o null, asigna un valor por defecto
+            }
+
+            // Cuerpo del correo HTML para recuperación de contraseña
+            String htmlContent = String.format("""
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <style>
+                            body {
+                                font-family: Arial, sans-serif;
+                                background-color: #f4f4f4;
+                                padding: 20px;
+                            }
+                            .email-container {
+                                background-color: white;
+                                padding: 20px;
+                                border-radius: 10px;
+                                max-width: 600px;
+                                margin: auto;
+                                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                            }
+                            h1 {
+                                color: #333;
+                            }
+                            p {
+                                color: #666;
+                            }
+                            .footer {
+                                margin-top: 20px;
+                                text-align: center;
+                                font-size: 12px;
+                                color: #999;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="email-container">
+                            <h1>Recuperación de cuenta - BookHaven</h1>
+                            <p>Hola %s,</p>
+                            <p>Recibimos una solicitud para recuperar tu contraseña.</p>
+                            <p>Tu nueva contraseña temporal es: <strong>%s</strong></p>
+                            <p>Te recomendamos cambiar tu contraseña después de iniciar sesión.</p>
+                            <div class="footer">
+                                <p>© 2024 BookHaven. Todos los derechos reservados.</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                    """, nombreUsuario, details.getTemporaryPassword()); // Aquí se pasa el nombre y la nueva contraseña
+
+            helper.setText(htmlContent, true); // Usar contenido HTML
+
+            javaMailSender.send(mimeMessage);
+            return "Correo de recuperación enviado exitosamente";
+        } catch (MessagingException e) {
+            return "Error al enviar el correo de recuperación";
+        }
+    }
 
 }
-

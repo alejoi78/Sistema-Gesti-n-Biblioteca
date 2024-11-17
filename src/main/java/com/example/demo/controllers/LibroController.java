@@ -20,7 +20,6 @@ public class LibroController {
     @Autowired
     private LibroRepository LibroRepository;
 
-
     // Obtener todos los libros
     @GetMapping("/libros")
     @ResponseBody
@@ -77,7 +76,6 @@ public class LibroController {
                 libroExistente.setImagenLibroLink(libroActualizado.getImagenLibroLink());
             }
 
-
             // Guarda el libro actualizado
             LibroRepository.save(libroExistente);
 
@@ -86,22 +84,22 @@ public class LibroController {
             return new ResponseEntity<>("Libro no encontrado", HttpStatus.NOT_FOUND);
         }
     }
-    
-// borrar libro
-@DeleteMapping("/libros/{id}")
-@ResponseBody
-public ResponseEntity<String> eliminarLibro(@PathVariable int id) {
-    System.out.println("Intentando eliminar libro con ID: " + id);
-    
-    if (LibroRepository.existsById(id)) {
-        LibroRepository.deleteById(id);
-        System.out.println("Libro eliminado: " + id);
-        return new ResponseEntity<>("Libro eliminado exitosamente", HttpStatus.OK);
-    } else {
-        System.out.println("Libro no encontrado: " + id);
-        return new ResponseEntity<>("Libro no encontrado", HttpStatus.NOT_FOUND);
+
+    // borrar libro
+    @DeleteMapping("/libros/{id}")
+    @ResponseBody
+    public ResponseEntity<String> eliminarLibro(@PathVariable int id) {
+        System.out.println("Intentando eliminar libro con ID: " + id);
+
+        if (LibroRepository.existsById(id)) {
+            LibroRepository.deleteById(id);
+            System.out.println("Libro eliminado: " + id);
+            return new ResponseEntity<>("Libro eliminado exitosamente", HttpStatus.OK);
+        } else {
+            System.out.println("Libro no encontrado: " + id);
+            return new ResponseEntity<>("Libro no encontrado", HttpStatus.NOT_FOUND);
+        }
     }
-}
 
     // Obtener libro por título
     @GetMapping("/libros/{titulo}")
@@ -112,7 +110,3 @@ public ResponseEntity<String> eliminarLibro(@PathVariable int id) {
     }
 
 }
-
-
-
-

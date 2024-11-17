@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import io.jsonwebtoken.SignatureException;
 
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -94,7 +93,7 @@ public class ControladorREST {
         return "crudUsuarios";
     }
 
-   // Método para obtener todos los usuarios (HTTP GET)
+    // Método para obtener todos los usuarios (HTTP GET)
     @GetMapping("/usuarios")
     @ResponseBody
     public ResponseEntity<List<Usuarios>> getUsuarios(@RequestHeader("id_rol") int idRol) {
@@ -143,7 +142,7 @@ public class ControladorREST {
             Optional<Usuarios> usuarioExistenteOpt = usuariosRepository.findById(id);
             if (usuarioExistenteOpt.isPresent()) {
                 Usuarios usuarioExistente = usuarioExistenteOpt.get();
-    
+
                 // Actualizar todos los campos directamente
                 if (usuarioActualizado.getNombre() != null) {
                     usuarioExistente.setNombre(usuarioActualizado.getNombre());
@@ -161,7 +160,7 @@ public class ControladorREST {
                     usuarioExistente.setRol(usuarioActualizado.getRol());
                 }
                 // Agrega más campos aquí según sea necesario
-    
+
                 usuariosRepository.save(usuarioExistente);
                 return new ResponseEntity<>("Usuario actualizado exitosamente", HttpStatus.OK);
             } else {
@@ -170,7 +169,6 @@ public class ControladorREST {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acceso denegado");
     }
-    
 
     // Nuevo método para la autenticación
     @PostMapping("/auth")
@@ -239,11 +237,12 @@ public class ControladorREST {
         try {
             // Verifica y extrae los claims del token
             Claims claims = Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
 
-            // Si el token es válido, puedes retornar los claims o cualquier información que necesites
+            // Si el token es válido, puedes retornar los claims o cualquier información que
+            // necesites
             return ResponseEntity.ok(claims);
         } catch (SignatureException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
@@ -252,12 +251,26 @@ public class ControladorREST {
         }
     }
 
-
     // Método para registrar un nuevo usuario (HTTP POST)
     @PostMapping("/registrar")
     public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDetails registrationDetails) {
         try {
-            // Crear un nuevo objeto de usuario
+            // Validar si el nombre de usuario ya existe
+            boolean usernameExists = usuariosRepository.existsByUsername(registrationDetails.getUsername());
+            // Validar si el correo electrónico ya existe
+            boolean emailExists = usuariosRepository
+                    .existsByCorreoelectronico(registrationDetails.getcorreoelectronico());
+
+            // Verificar las condiciones y retornar el mensaje adecuado
+            if (usernameExists && emailExists) {
+                return ResponseEntity.badRequest().body("El nombre de usuario y el correo electrónico ya existen.");
+            } else if (usernameExists) {
+                return ResponseEntity.badRequest().body("El nombre de usuario ya existe.");
+            } else if (emailExists) {
+                return ResponseEntity.badRequest().body("El correo electrónico ya está en uso.");
+            }
+
+            // Crear el nuevo usuario y configurar sus atributos
             Usuarios nuevoUsuario = new Usuarios();
             nuevoUsuario.setNombre(registrationDetails.getNombre());
             nuevoUsuario.setApellido(registrationDetails.getApellido());
@@ -265,22 +278,20 @@ public class ControladorREST {
             nuevoUsuario.setUsername(registrationDetails.getUsername());
             nuevoUsuario.setPassword(passwordEncoder.encode(registrationDetails.getPassword()));
 
-            // Obtener el idRol del objeto rol
-            int idRol = registrationDetails.getRol().getIdRol();
-            // Buscar el rol por id
-            Roles rol = rolRepository.findById(idRol)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
-            System.out.println("Rol encontrado: " + rol.getTipodeRol());
-            // Asignar el rol encontrado al usuario
+            // Obtener y asignar el rol del usuario
+            Roles rol = rolRepository.findById(registrationDetails.getRol().getIdRol())
+                    .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
             nuevoUsuario.setRol(rol);
 
             // Guardar el usuario en la base de datos
             Usuarios usuarioGuardado = usuariosRepository.save(nuevoUsuario);
 
-            // Si el usuario se ha guardado exitosamente, enviamos el correo en un nuevo hilo
+            // Si el usuario se ha guardado exitosamente, enviamos el correo en un nuevo
+            // hilo
             if (usuarioGuardado != null) {
                 new Thread(() -> {
                     try {
+                        // Crear los detalles del correo
                         EmailDetails emailDetails = new EmailDetails();
                         emailDetails.setRecipient(nuevoUsuario.getCorreoelectronico());
                         emailDetails.setSubject("Bienvenido a nuestro servicio");
@@ -330,10 +341,11 @@ public class ControladorREST {
                                     </div>
                                 </body>
                                 </html>
-                                """.formatted(nuevoUsuario.getNombre(), nuevoUsuario.getNombre(), nuevoUsuario.getApellido());
+                                """.formatted(nuevoUsuario.getNombre(), nuevoUsuario.getNombre(),
+                                nuevoUsuario.getApellido());
 
                         emailDetails.setMsgBody(htmlBody);
-                        emailService.sendHtmlMail(emailDetails);
+                        emailService.sendHtmlMail(emailDetails); // Enviar correo
                     } catch (Exception e) {
                         // Manejo de errores al enviar el correo
                         System.err.println("Error al enviar el correo: " + e.getMessage());
@@ -349,7 +361,7 @@ public class ControladorREST {
         }
     }
 
-    //Insertar automaticamente los roles en la base de datos
+    // Insertar automaticamente los roles en la base de datos
     @Configuration
     public class LoadDatabase {
 
@@ -367,19 +379,85 @@ public class ControladorREST {
 
         @Bean
         CommandLineRunner initUsersDatabase(UsuariosRepository usuariosRepository) {
-                return args -> {
-                    // Esperar unos segundos antes de insertar el usuario
+            return args -> {
                 try {
-                    Thread.sleep(5000);  // 5 segundos de espera
-                    Roles rol = new Roles(1, "Administrador"); 
-                    usuariosRepository.save(new Usuarios(1, "Home", "Book", "$2a$10$IfxIObfqEM76kuQhb/12/uT5O8dEjz6HEoNMjm2gxl3Ej4/lV6PGa", "BookHaven", "BookHaven.com", rol));
+                    Thread.sleep(5000); // Esperar 5 segundos
+                    // Crear el rol para el usuario
+                    Roles rol = new Roles(1, "Administrador");
+
+                    // Crear un usuario con los datos que ya tienes
+                    Usuarios admin = new Usuarios(
+                            1, // El ID se genera automáticamente, por lo que puedes poner un valor temporal
+                            "Home",
+                            "Book",
+                            "$2a$10$IfxIObfqEM76kuQhb/12/uT5O8dEjz6HEoNMjm2gxl3Ej4/lV6PGa", // Contraseña encriptada
+                            "BookHaven",
+                            "BookHaven.com",
+                            null, // contrasenaTemporal
+                            false, // esContrasenaTemporal
+                            rol // Rol
+                    );
+
+                    // Guardar el usuario en la base de datos
+                    usuariosRepository.save(admin);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
-
-                
             };
         }
-    }
 
+        @PostMapping("/cambiar-contrasena")
+        public ResponseEntity<String> cambiarContrasena(
+                @RequestParam String username,
+                @RequestParam String contrasenaActual,
+                @RequestParam String nuevaContrasena) {
+
+            // Buscar usuario por username
+            Optional<Usuarios> usuarioOptional = usuariosRepository.findByUsername(username);
+
+            if (!usuarioOptional.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            }
+
+            Usuarios usuario = usuarioOptional.get();
+
+            // Validar la contraseña actual
+            if (!passwordEncoder.matches(contrasenaActual, usuario.getPassword())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña actual incorrecta");
+            }
+
+            // Guardar la nueva contraseña encriptada
+            usuario.setPassword(passwordEncoder.encode(nuevaContrasena));
+            usuariosRepository.save(usuario);
+
+            return ResponseEntity.ok("Contraseña actualizada exitosamente");
+        }
+
+        @PostMapping("/cambiar-contrasenarecuperada")
+        public ResponseEntity<String> cambiarContrasena(
+                @RequestParam String username,
+                @RequestParam String nuevaContrasena) {
+
+            Optional<Usuarios> usuarioOptional = usuariosRepository.findByUsername(username);
+
+            if (!usuarioOptional.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            }
+
+            Usuarios usuario = usuarioOptional.get();
+
+            if (!usuario.isEsContrasenaTemporal()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("No se puede cambiar la contraseña porque no es temporal.");
+            }
+
+            usuario.setPassword(passwordEncoder.encode(nuevaContrasena));
+            usuario.setTemporaryPassword(null); // Limpiar la contraseña temporal
+            usuario.setEsContrasenaTemporal(false);
+            usuariosRepository.save(usuario);
+
+            return ResponseEntity.ok("Contraseña actualizada exitosamente");
+        }
+
+    }
 }

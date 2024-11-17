@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class LibrosRegistrationDetails{
+public class LibrosRegistrationDetails {
     private long id;
     private int contador = 0;
     private String titulo;
@@ -62,8 +62,6 @@ public class LibrosRegistrationDetails{
         this.anioPublicacion = anioPublicacion;
     }
 
-
-
     public String getGenero() {
         return this.genero;
     }
@@ -72,8 +70,4 @@ public class LibrosRegistrationDetails{
         this.genero = genero;
     }
 
-
-  
-  
-   
 }

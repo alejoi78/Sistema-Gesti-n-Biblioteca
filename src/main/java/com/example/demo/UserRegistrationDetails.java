@@ -8,14 +8,42 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UserRegistrationDetails {
+    private int id;
     private String nombre;
     private String apellido;
     private String correoelectronico;
     private String password;
     private String Username;
     private Roles rol;
+    private String TemporaryPassword;
+    private Boolean esContrasenaTemporal;
 
-    public UserRegistrationDetails(String nombre, String apellido, String correoelectronico, String password, String Username, Roles rol) {
+    public UserRegistrationDetails(Integer id, String nombre, String apellido, String correoelectronico,
+            String password, String Username, Roles rol, String TemporaryPassword, Boolean esContrasenaTemporal) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correoelectronico = correoelectronico;
+        this.password = password;
+        this.Username = Username;
+        this.rol = rol;
+        this.TemporaryPassword = TemporaryPassword;
+        this.esContrasenaTemporal = esContrasenaTemporal;
+    }
+
+    public UserRegistrationDetails(String nombre, String apellido, String correoelectronico, String password,
+            String Username, Roles rol, String TemporaryPassword) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correoelectronico = correoelectronico;
+        this.password = password;
+        this.Username = Username;
+        this.rol = rol;
+        this.TemporaryPassword = TemporaryPassword;
+    }
+
+    public UserRegistrationDetails(String nombre, String apellido, String correoelectronico, String password,
+            String Username, Roles rol) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.correoelectronico = correoelectronico;
@@ -25,6 +53,14 @@ public class UserRegistrationDetails {
     }
 
     // Getters y Setters
+    public String getContrasenaTemporal() {
+        return this.TemporaryPassword;
+    }
+
+    public void setResetPasswordToken(String TemporaryPassword) {
+        this.TemporaryPassword = TemporaryPassword;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -66,10 +102,18 @@ public class UserRegistrationDetails {
     }
 
     public Roles getRol() {
-        return rol; 
+        return rol;
     }
 
     public void setRol(Roles rol) {
-        this.rol = rol; 
+        this.rol = rol;
+    }
+
+    public Boolean getEsContrasenaTemporal() {
+        return this.esContrasenaTemporal;
+    }
+
+    public void setEsContrasenaTemporal(Boolean esContrasenaTemporal) {
+        this.esContrasenaTemporal = esContrasenaTemporal;
     }
 }

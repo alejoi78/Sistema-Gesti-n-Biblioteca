@@ -32,10 +32,11 @@
                         <form onsubmit="login(event)">
                         
                             <div class="form-group first">
-                                <label for="username">Correo Electronico</label>
-                                <input style="height: 40px;"type="text" id="username"
-                                    name="username" required class="form-control" placeholder="">
+                                <label for="correoelectronico">Correo Electrónico</label>
+                                <input style="height: 40px;" type="text" id="correoelectronico"
+                                    name="correoelectronico" required class="form-control" placeholder="">
                             </div>
+                            
                             <input style="margin-top: 40px;" type="submit" value="Enviar"
                                 class="btn btn-block btn-primary">
 
@@ -54,19 +55,29 @@
 
     <script>
         async function login(event) {
-            event.preventDefault(); // Prevenir el envío del formulario
+    event.preventDefault(); // Prevenir el envío del formulario
 
-            const username = document.getElementById('Correo Electronico').value;
+    const correoelectronico = document.getElementById('correoelectronico').value;
 
-            const response = await fetch('http://localhost:8080/recuperar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username}),
-            });
+    try {
+        const response = await fetch('http://localhost:8080/recuperar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ correoelectronico }),
+        });
 
+        if (response.ok) {
+            toastr.success("Solicitud de recuperación enviada con éxito.");
+        } else {
+            toastr.error("Hubo un error al enviar la solicitud.");
         }
+    } catch (error) {
+        toastr.error("Error al conectar con el servidor.");
+    }
+}
+
     </script>
 
 </body>

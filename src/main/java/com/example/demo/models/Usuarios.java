@@ -15,15 +15,21 @@ public class Usuarios {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
-    
+
     private String nombre;
     private String apellido;
     private String password;
     private String username;
     private String correoelectronico;
 
+    // Nueva columna para contraseña temporal
+    private String TemporaryPassword;
+
+    @Column(nullable = false)
+    private boolean esContrasenaTemporal;
+
     // Relación con Roles
     @ManyToOne
     @JoinColumn(name = "id_rol") // Esta columna se referirá a la tabla de roles
-    private Roles rol; // Objeto de la clase Roles
+    private Roles rol;
 }
