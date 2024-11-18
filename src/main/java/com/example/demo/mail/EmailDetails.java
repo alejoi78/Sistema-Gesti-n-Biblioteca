@@ -22,4 +22,5 @@ public class EmailDetails {
     private double precio; // Precio del libro
     private Date fechaCompra; // Fecha de la compra
     private String nombreusuario;
+    private String pdfLibro;
 }

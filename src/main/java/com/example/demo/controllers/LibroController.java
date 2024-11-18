@@ -75,6 +75,9 @@ public class LibroController {
             if (libroActualizado.getImagenLibroLink() != null && !libroActualizado.getImagenLibroLink().isEmpty()) {
                 libroExistente.setImagenLibroLink(libroActualizado.getImagenLibroLink());
             }
+            if (libroActualizado.getPdfLibroLink() != null && !libroActualizado.getPdfLibroLink().isEmpty()) {
+                libroExistente.setPdfLibroLink(libroActualizado.getPdfLibroLink());
+            }
 
             // Guarda el libro actualizado
             LibroRepository.save(libroExistente);

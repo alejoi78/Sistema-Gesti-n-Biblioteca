@@ -453,7 +453,8 @@
               <label>Imagen</label>
               <div class="mdi-camera-flip-outline" onclick="openFileDialog()">Seleccionar imagen <img id="imagePreview" class="preview" src="" alt="Previsualización de la imagen" style="display: none;"> <p style="text-align: center;" id="nombreArchivo"></p></div>
               
-              
+              <label class="mt-2">PDF</label>
+              <div class="mdi-camera-flip-outline" onclick="openFileDialogCrearPDFLibro()">Seleccionar PDF <p style="text-align: center;" id="nombreArchivoPDFCrearLibro"></p></div>
             </div>
             <div class="modal-footer">
               <input
@@ -511,7 +512,9 @@
                 <input type="text" id="generoEditarLibro" class="form-control" required />
               </div>
               <label>Imagen</label>
-              <div class="mdi-camera-flip-outline" onclick="openFileDialogLibro()">Seleccionar imagen <img id="imagePreviewLibro" class="preview" src="" alt="Previsualización de la imagen" style="display: none;"> <p style="text-align: center;" id="nombreArchivoEditarLibro"></p></div>
+              <div class="mdi-camera-flip-outline" onclick="openFileDialogEditarIMGLibro()">Seleccionar imagen <img id="imagePreviewLibro" class="preview" src="" alt="Previsualización de la imagen" style="display: none;"> <p style="text-align: center;" id="nombreArchivoIMGEditarLibro"></p></div>
+              <label class="mt-2">PDF</label>
+              <div class="mdi-camera-flip-outline" onclick="openFileDialogEditarPDFLibro()">Seleccionar PDF <p style="text-align: center;" id="nombreArchivoPDFEditarLibro"></p> <div id="pdfLinkPreviewEditLibro"></div> </div>
             </div>
             <div class="modal-footer">
               <input
@@ -838,7 +841,7 @@
               <td>${libros.precio}</td>
               <td>${libros.genero}</td>
               <td>
-                <a href="#editLibroModal" class="editLibro" style="color: orange" data-toggle="modal" data-id="${libros.id}" data-titulo="${libros.titulo}" data-autor="${libros.autor}" data-paginas="${libros.numeroPaginas}" data-año="${libros.anioPublicacion}" data-precio="${libros.precio}" data-genero="${libros.genero}" data-imagenlibro="${libros.imagenLibroLink}" >
+                <a href="#editLibroModal" class="editLibro" style="color: orange" data-toggle="modal" data-id="${libros.id}" data-titulo="${libros.titulo}" data-autor="${libros.autor}" data-paginas="${libros.numeroPaginas}" data-año="${libros.anioPublicacion}" data-precio="${libros.precio}" data-genero="${libros.genero}" data-imagenlibro="${libros.imagenLibroLink}" data-pdflibro="${libros.pdfLibroLink}">
                   <i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i>
                 </a>
 
@@ -859,6 +862,7 @@
         async function manejarEnvioFormularioEditarLibro(event) {
           event.preventDefault();
           let perfilImagen = null
+          let perfilPdf = null
 
           if (imageData) {
             
@@ -875,7 +879,6 @@
                 method: 'PUT',
                 body: formData,
                 headers: {
-                  // Nota: Fetch no necesita el header 'Content-Type' cuando usas FormData
                 }
               }
             );
@@ -884,14 +887,47 @@
               const dataImage = await response.json();
 
               perfilImagen = 'http://localhost:5050/uploads/InventarioEquipos/' + dataImage.img;
-            } else {
-              toastr.options.positionClass = 'toast-bottom-right';
-              toastr.error('Error al subir la imagen.');
+              } else {
+                toastr.options.positionClass = 'toast-bottom-right';
+                toastr.error('Error al subir la imagen.');
+              }
+            } catch (error) {
+              console.error('Error al subir la imagen:', error);
             }
-          } catch (error) {
-            console.error('Error al subir la imagen:', error);
           }
-        }
+
+          if (pdfData) {
+            
+            try {
+              const formData = new FormData();
+              formData.append('file', pdfData);
+  
+              const perfilPdfFileURL = "URL_DEL_ARCHIVO"; // Cambia esto por tu URL
+              const codigoEncriptado = btoa(perfilPdfFileURL.split('InventarioEquipos/')[1]);
+  
+              const response = await fetch(
+                `http://localhost:5050/api/file/file/InventarioEquiposComputo/SW52ZW50YXJpb0VxdXBvc2RlQ29tcHV0bw===&RGVzYXJvbGluZw==&UmFpei==&${codigoEncriptado}`,
+                {
+                  method: 'PUT',
+                  body: formData,
+                  headers: {
+                  }
+                }
+              );
+  
+              if (response.ok) {
+                const dataImage = await response.json();
+  
+                perfilPdf = 'http://localhost:5050/uploads/InventarioEquipos/' + dataImage.img;
+                } else {
+                  toastr.options.positionClass = 'toast-bottom-right';
+                  toastr.error('Error al subir la imagen.');
+                }
+              } catch (error) {
+                console.error('Error al subir la imagen:', error);
+              }
+            }
+            
         
           // Extraer los valores del formulario en el momento del submit
           let datosNuevosEditLibro = {
@@ -901,7 +937,8 @@
             año: document.getElementById('añoEditarLibro').value,
             precio: document.getElementById('precioEditarLibro').value,
             genero: document.getElementById('generoEditarLibro').value,
-            imagenLibroLink: perfilImagen
+            imagenLibroLink: perfilImagen,
+            pdfLibroLink: perfilPdf
           };
           
           
@@ -923,12 +960,14 @@
               anioPublicacion: datosNuevosEditLibro.año,
               precio: datosNuevosEditLibro.precio,
               genero: datosNuevosEditLibro.genero,
-              imagenLibroLink: perfilImagen
+              imagenLibroLink: perfilImagen,
+              pdfLibroLink: perfilPdf
               }),
             })
               .then((response) => {
                 $("#editLibroModal").modal("hide");
                 //Actualizar crud Libros
+                nombreArchivoElementEditarPDFLibro.textContent = null
                 administrarLibros(dataTokenUsuario);
               })
               .catch((error) => {
@@ -951,6 +990,7 @@
           let precioLibro = $(this).data("precio");
           let generoLibro = $(this).data("genero");
           let imagenLibroLink = $(this).data("imagenlibro");
+          let pdfLibroLink = $(this).data("pdflibro");
 
           // Extraer los valores originales para referencia
           document.getElementById('tituloEditarLibro').value = tituloLibro;
@@ -960,6 +1000,8 @@
           document.getElementById('precioEditarLibro').value = precioLibro;
           document.getElementById('generoEditarLibro').value = generoLibro;
           imagePreviewLibro.src = imagenLibroLink
+          document.getElementById("pdfLinkPreviewEditLibro").innerText = pdfLibroLink;
+          
 
           // Guardar los datos originales
           datosAnterioresEditLibro = {
@@ -969,7 +1011,8 @@
             año: añoLibro,
             precio: precioLibro,
             genero: generoLibro,
-            imagenLibroLink: imagenLibroLink
+            imagenLibroLink: imagenLibroLink,
+            pdfLibroLink: pdfLibroLink
           };
 
           // Remover el evento submit anterior para evitar duplicados
@@ -1039,6 +1082,7 @@
   document.getElementById('addLibroForm').addEventListener('submit', async function (event) {
     event.preventDefault(); // Evitar que el formulario se envíe automáticamente
     let perfilImagen = null
+    let perfilPdf = null
 
     // Extraer los valores de los campos del formulario
     const titulo = document.getElementById('tituloAgregarLibro').value;
@@ -1051,6 +1095,12 @@
       if (!imageData) {
         toastr.options.positionClass = 'toast-bottom-right';
         toastr.error('Por favor, selecciona una imagen antes de guardar.');
+        return;
+      }
+
+      if (!pdfData) {
+        toastr.options.positionClass = 'toast-bottom-right';
+        toastr.error('Por favor, selecciona un pdf antes de guardar.');
         return;
       }
 
@@ -1083,6 +1133,36 @@
       } catch (error) {
         console.error('Error al subir la imagen:', error);
       }
+
+      try {
+        const formData = new FormData();
+        formData.append('file', pdfData);
+
+        const perfilPdfFileURL = "URL_DEL_ARCHIVO"; // Cambia esto por tu URL
+        const codigoEncriptado = btoa(perfilPdfFileURL.split('InventarioEquipos/')[1]);
+
+        const response = await fetch(
+          `http://localhost:5050/api/file/file/InventarioEquiposComputo/SW52ZW50YXJpb0VxdXBvc2RlQ29tcHV0bw===&RGVzYXJvbGluZw==&UmFpei==&${codigoEncriptado}`,
+          {
+            method: 'PUT',
+            body: formData,
+            headers: {
+              // Nota: Fetch no necesita el header 'Content-Type' cuando usas FormData
+            }
+          }
+        );
+
+        if (response.ok) {
+          const dataPdf = await response.json();
+
+          perfilPdf = 'http://localhost:5050/uploads/InventarioEquipos/' + dataPdf.img;
+        } else {
+          toastr.options.positionClass = 'toast-bottom-right';
+          toastr.error('Error al subir la imagen.');
+        }
+      } catch (error) {
+        console.error('Error al subir la imagen:', error);
+      }
       
 
     // Crear el objeto con los datos del formulario
@@ -1094,6 +1174,7 @@
       precio: precio,
       genero: genero,
       imagenLibroLink: perfilImagen,
+      pdfLibroLink: perfilPdf
     };
     
     // Llamar a la función crearUsuario con los datos obtenidos
@@ -1115,8 +1196,11 @@
 
     let dialog = document.getElementById('dialog');
     let imageData = null;
+    let pdfData = null;
     let nombreArchivoElement = document.getElementById('nombreArchivo');
-    let nombreArchivoElementEditarLibro = document.getElementById('nombreArchivoEditarLibro');
+    let nombreArchivoElementEditarIMGLibro = document.getElementById('nombreArchivoIMGEditarLibro');
+    let nombreArchivoElementEditarPDFLibro = document.getElementById('nombreArchivoPDFEditarLibro');
+    let nombreArchivoElementCrearPDFLibro = document.getElementById('nombreArchivoPDFCrearLibro');
     let imagePreview = document.getElementById('imagePreview');
     let imagePreviewLibro = document.getElementById('imagePreviewLibro');
 
@@ -1131,19 +1215,33 @@
 
       inputFile.addEventListener('change', handleImageChange);
       inputFile.click();
-
-      
     }
 
-    function openFileDialogLibro() {
+    function openFileDialogEditarIMGLibro() {
       const inputFile = document.createElement('input');
       inputFile.type = 'file';
       inputFile.accept = 'image/*';
 
-      inputFile.addEventListener('change', handleImageChangeLibro);
+      inputFile.addEventListener('change', handleImageChangeEditarIMGLibro);
       inputFile.click();
+    }
 
-      
+    function openFileDialogEditarPDFLibro() {
+      const inputFile = document.createElement('input');
+      inputFile.type = 'file';
+      inputFile.accept = 'application/pdf';
+
+      inputFile.addEventListener('change', handleImageChangeEditarPDFLibro);
+      inputFile.click();
+    }
+
+    function openFileDialogCrearPDFLibro() {
+      const inputFile = document.createElement('input');
+      inputFile.type = 'file';
+      inputFile.accept = 'application/pdf';
+
+      inputFile.addEventListener('change', handleImageChangeCrearPDFLibro);
+      inputFile.click();
     }
 
     function handleImageChange(event) {
@@ -1160,10 +1258,10 @@
       reader.readAsDataURL(file);
     }
 
-    function handleImageChangeLibro(event) {
+    function handleImageChangeEditarIMGLibro(event) {
       const file = event.target.files[0];
       imageData = file;
-      nombreArchivoElementEditarLibro.textContent = file.name;
+      nombreArchivoElementEditarIMGLibro.textContent = file.name;
 
       // Mostrar la previsualización de la imagen
       const reader = new FileReader();
@@ -1172,6 +1270,20 @@
         imagePreviewLibro.style.display = 'block'; // Muestra la imagen
       }
       reader.readAsDataURL(file);
+    }
+
+    function handleImageChangeEditarPDFLibro(event) {
+      const file = event.target.files[0];
+      pdfData = file;
+      nombreArchivoElementEditarPDFLibro.textContent = file.name;
+    }
+
+    function handleImageChangeCrearPDFLibro(event) {
+      console.log("oepapiiiiii");
+      
+      const file = event.target.files[0];
+      pdfData = file;
+      nombreArchivoElementCrearPDFLibro.textContent = file.name;
     }
 
   

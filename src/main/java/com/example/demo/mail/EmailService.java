@@ -13,6 +13,6 @@ public interface EmailService {
 
     String sendPassword(EmailDetails details);
 
-    String enviarCorreoCompra(String nombreusuario, String destinatario, String tituloLibro, String autorLibro,
+    String enviarCorreoCompra(String nombreusuario, String destinatario, String tituloLibro, String autorLibro, String pdfLibro,
             double precio, Date fechaCompra);
 }

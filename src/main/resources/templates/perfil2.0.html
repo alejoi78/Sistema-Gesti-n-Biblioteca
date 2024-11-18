@@ -91,7 +91,7 @@
     function openFileDialog() {
       const inputFile = document.createElement('input');
       inputFile.type = 'file';
-      inputFile.accept = 'image/*';
+      inputFile.accept = 'image/*,application/pdf';
 
       inputFile.addEventListener('change', handleImageChange);
       inputFile.click();

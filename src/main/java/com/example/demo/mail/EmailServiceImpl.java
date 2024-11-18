@@ -210,7 +210,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public String enviarCorreoCompra(String nombreusuario, String destinatario, String tituloLibro, String autorLibro,
+    public String enviarCorreoCompra(String nombreusuario, String destinatario, String tituloLibro, String autorLibro, String pdfLibro,
             double precio, Date fechaCompra) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -294,6 +294,7 @@ public class EmailServiceImpl implements EmailService {
                                             <li><strong>Autor:</strong> %s</li>
                                             <li><strong>Precio:</strong> $%.2f</li>
                                             <li><strong>Fecha:</strong> %s</li>
+                                            <li><strong>Link PDF:</strong> %s</li>
                                         </ul>
                                         <p>Estamos encantados de que hayas elegido **BookHaven** para tus necesidades literarias. Esperamos que disfrutes tu nuevo libro.</p>
                                         <p>Si tienes alguna pregunta o necesitas ayuda, no dudes en ponerte en contacto con nuestro equipo de soporte.</p>
@@ -307,7 +308,7 @@ public class EmailServiceImpl implements EmailService {
                             </html>
 
                                     """,
-                    nombreusuario, tituloLibro, autorLibro, precio, fechaCompra.toString());
+                    nombreusuario, tituloLibro, autorLibro, precio, fechaCompra.toString(), pdfLibro);
 
             helper.setText(htmlContent, true);
             javaMailSender.send(mimeMessage);

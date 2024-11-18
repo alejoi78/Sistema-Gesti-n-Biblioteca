@@ -72,8 +72,10 @@ public class ComprasController {
                         usuario.getCorreoelectronico(),
                         libro.getTitulo(),
                         libro.getAutor(),
+                        libro.getPdfLibroLink(),
                         libro.getPrecio(),
-                        compra.getFechaCompra());
+                        compra.getFechaCompra()
+                        );
                 System.out.println("Correo de confirmación enviado a: " + usuario.getCorreoelectronico());
             } catch (Exception e) {
                 System.err.println("Error al enviar el correo de confirmación: " + e.getMessage());
