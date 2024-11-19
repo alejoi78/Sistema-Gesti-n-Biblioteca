@@ -78,7 +78,7 @@ public class ControladorREST {
     // Mi Perfil
     @GetMapping("/perfil")
     public String perfil() {
-        return "perfil2.0";
+        return "perfil";
     }
 
     // Recuperar contraseña
